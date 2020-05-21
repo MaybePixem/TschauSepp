@@ -11,8 +11,12 @@ public class Game {
     private ArrayList<Card> currentDeck = new ArrayList<>();
     private ArrayList<Card> sideDeck;
     private int currentPlayer = 0;
+    private int totalPlayers;
+
 
     public Game(int numberOfPlayers, int numberOfAI, int numberOfStartingCards) {
+        totalPlayers = numberOfPlayers + numberOfAI;
+
         sideDeck = createDeck();
 
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -22,6 +26,13 @@ public class Game {
         for (int i = 0; i < numberOfAI; i++) {
             Player ai = new Player(createDeckForPlayer(numberOfStartingCards));
             players.add(ai);
+        }
+
+        currentDeck.add(drawCard());
+        while (!(currentDeck.get(0) instanceof NumberCard)) {
+            sideDeck.add(currentDeck.get(0));
+            currentDeck.remove(0);
+            currentDeck.add(drawCard());
         }
 
     }
@@ -46,37 +57,67 @@ public class Game {
             }
         }
         Collections.shuffle(deck);
-        System.out.println(deck.toString());
         return deck;
     }
 
     public Card drawCard() {
-        return new Card(2);
+        return sideDeck.remove(0);
     }
 
     public void nextPlayer(boolean skip, int pickup) {
-
+        if (skip) {
+            if (currentPlayer + 2 >= totalPlayers) {
+                if (currentPlayer + 1 >= totalPlayers) {
+                    currentPlayer = 1;
+                } else {
+                    currentPlayer = 0;
+                }
+            } else {
+                currentPlayer += 2;
+            }
+        } else {
+            if (currentPlayer + 1 == totalPlayers) {
+                currentPlayer = 0;
+            } else {
+                currentPlayer++;
+            }
+        }
     }
 
     public Player getWinningPlayer() {
-        return new Player(new ArrayList<Card>());
-    }
-
-    public boolean won() {
-        return true;
+        for (Player p :
+                players) {
+            if (p.getdeck().size() == 0)
+                return p;
+            break;
+        }
+        return null;
     }
 
     public boolean playCard(Card c) {
-
-        return true;
+        if (checkValid(c)) {
+            if(c instanceof  ActionCard){
+                doCardAction(c);
+            }
+            currentDeck.add(c);
+            players.get(currentPlayer).getdeck().remove(c);
+            return true;
+        }
+        return false;
     }
 
     public void doCardAction(Card c) {
 
     }
 
-    public static boolean checkValid(Card c) {
-        return true;
+    public boolean checkValid(Card c) {
+        if (c instanceof NumberCard || ((ActionCard) c).getAction().equals("Sieben") || ((ActionCard) c).getAction().equals("Acht")) {
+            return c.getColor() == currentDeck.get(currentDeck.size()).getColor()
+                    || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size())).getValue());
+
+        } else {
+            return true;
+        }
     }
 
     public void callTschau() {

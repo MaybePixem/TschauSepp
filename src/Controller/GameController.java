@@ -12,11 +12,11 @@ import java.util.ArrayList;
 public class GameController {
 
     public static final String[] NUMBERCARDS = {
-            "Ass", "König", "Ober", "Banner", "Neun", "Sechs"
+            "Ass", "König", "Ober","Under", "Banner", "Neun", "Sechs"
     };
 
     public static final String[] ACTIONCARDS = {
-            "Sieben", "Sieben", "Sieben", "Sieben",
+            "Sieben", "Acht", "Bauer"
     };
 
     public static final String[] COLORS = {"Eichel", "Rosen", "Schellen", "Schilten"};
@@ -34,6 +34,7 @@ public class GameController {
 
     public void startGame() {
         GameView gameView = new GameView();
+
         game = new Game(numPlayers, numAIPlayers, numStartingCards);
     }
 }

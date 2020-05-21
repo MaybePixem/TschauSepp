@@ -80,6 +80,7 @@ public class StartGameView extends JDialog {
         mainPanel.add(submitBtn, gridBagConstraintForLabel);
 
         numAISpinner.setValue(3);
+        numAISpinner.setValue(3);
         numStartingCardsSpinner.setValue(6);
 
         getContentPane().add(mainPanel);
@@ -107,7 +108,7 @@ public class StartGameView extends JDialog {
     }
 
     public int getNumPlayersSpinner() {
-        return (int) numAISpinner.getValue();
+        return (int) numPlayersSpinner.getValue();
     }
 
     public int getNumAISpinner() {
@@ -115,7 +116,7 @@ public class StartGameView extends JDialog {
     }
 
     public int getNumStartingCardsSpinner() {
-        return (int) numAISpinner.getValue();
+        return (int) numStartingCardsSpinner.getValue();
     }
 
     private void makeDigitsOnlySpinnerUsingDocumentFilter(JSpinner spinner) {
