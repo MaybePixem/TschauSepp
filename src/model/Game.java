@@ -1,41 +1,53 @@
 package model;
 
+import Controller.GameController;
+
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Game {
 
-    private static final String[] COLORS = {"Eichel", "Rosen", "Schellen", "Schilten"};
-
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Card> currentDeck = new ArrayList<>();
-    private ArrayList<Card> sideDeck = new ArrayList<>();
+    private ArrayList<Card> sideDeck;
     private int currentPlayer = 0;
 
     public Game(int numberOfPlayers, int numberOfAI, int numberOfStartingCards) {
-        createPlayers(numberOfPlayers, numberOfAI, numberOfStartingCards);
         sideDeck = createDeck();
-    }
 
-    public void createPlayers(int numberOfPlayers, int numberOfAI, int numberOfStartingCards) {
         for (int i = 0; i < numberOfPlayers; i++) {
-            Player p = new Player(new ArrayList<Card>());
-            for (int j = 0; j < numberOfStartingCards; j++) {
-
-            }
-            players.add(p);
+            Player player = new Player(createDeckForPlayer(numberOfStartingCards));
+            players.add(player);
         }
-
         for (int i = 0; i < numberOfAI; i++) {
-            Player ai = new AI(new ArrayList<Card>());
-            for (int j = 0; j < numberOfStartingCards; j++) {
-
-            }
+            Player ai = new Player(createDeckForPlayer(numberOfStartingCards));
             players.add(ai);
         }
+
+    }
+
+    private ArrayList<Card> createDeckForPlayer(int numberOfStartingCards) {
+        ArrayList<Card> deck = new ArrayList<>();
+        for (int j = 0; j < numberOfStartingCards; j++) {
+            deck.add(sideDeck.get(0));
+            sideDeck.remove(0);
+        }
+        return deck;
     }
 
     private ArrayList<Card> createDeck() {
-        return new ArrayList<>();
+        ArrayList<Card> deck = new ArrayList<>();
+        for (int i = 0; i < GameController.COLORS.length; i++) {
+            for (int j = 0; j < GameController.NUMBERCARDS.length; j++) {
+                deck.add(new NumberCard(i, GameController.NUMBERCARDS[j]));
+            }
+            for (int j = 0; j < GameController.ACTIONCARDS.length; j++) {
+                deck.add(new ActionCard(i, GameController.ACTIONCARDS[j]));
+            }
+        }
+        Collections.shuffle(deck);
+        System.out.println(deck.toString());
+        return deck;
     }
 
     public Card drawCard() {

@@ -26,10 +26,10 @@ public class StartGameView extends JDialog {
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        JPanel jPanel = new JPanel();
-        Border border = jPanel.getBorder();
+        JPanel mainPanel = new JPanel();
+        Border border = mainPanel.getBorder();
         Border margin = new EmptyBorder(10, 10, -10, 10);
-        jPanel.setBorder(new CompoundBorder(border, margin));
+        mainPanel.setBorder(new CompoundBorder(border, margin));
 
         GridBagLayout panelGridBagLayout = new GridBagLayout();
         panelGridBagLayout.columnWidths = new int[]{86, 86, 0};
@@ -37,7 +37,7 @@ public class StartGameView extends JDialog {
         panelGridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
         panelGridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0,
                 Double.MIN_VALUE};
-        jPanel.setLayout(panelGridBagLayout);
+        mainPanel.setLayout(panelGridBagLayout);
 
         SpinnerModel model1 = new SpinnerNumberModel(1, 0, 4, 1);
         SpinnerModel model2 = new SpinnerNumberModel(0, 0, 4, 1);
@@ -45,25 +45,25 @@ public class StartGameView extends JDialog {
 
 
         JLabel numPlayersLabel = new JLabel("Anzahl Spieler:");
-        addLabelToLayout(numPlayersLabel, 0, jPanel);
+        addLabelToLayout(numPlayersLabel, 0, mainPanel);
 
         numPlayersSpinner = new JSpinner(model1);
         makeDigitsOnlySpinnerUsingDocumentFilter(numPlayersSpinner);
-        addSpinnerToLayout(numPlayersSpinner, 0, jPanel);
+        addSpinnerToLayout(numPlayersSpinner, 0, mainPanel);
 
         JLabel numAILabel = new JLabel("Anzahl Roboter:");
-        addLabelToLayout(numAILabel, 1, jPanel);
+        addLabelToLayout(numAILabel, 1, mainPanel);
 
         numAISpinner = new JSpinner(model2);
         makeDigitsOnlySpinnerUsingDocumentFilter(numAISpinner);
-        addSpinnerToLayout(numAISpinner, 1, jPanel);
+        addSpinnerToLayout(numAISpinner, 1, mainPanel);
 
         JLabel numStartingCardsLabel = new JLabel("Anzahl Startkarten:");
-        addLabelToLayout(numStartingCardsLabel, 2, jPanel);
+        addLabelToLayout(numStartingCardsLabel, 2, mainPanel);
 
         numStartingCardsSpinner = new JSpinner(model3);
         makeDigitsOnlySpinnerUsingDocumentFilter(numStartingCardsSpinner);
-        addSpinnerToLayout(numStartingCardsSpinner, 2, jPanel);
+        addSpinnerToLayout(numStartingCardsSpinner, 2, mainPanel);
 
         submitBtn = new JButton("Starten");
         GridBagConstraints gridBagConstraintForLabel = new GridBagConstraints();
@@ -77,12 +77,12 @@ public class StartGameView extends JDialog {
                 dispose();
             }
         });
-        jPanel.add(submitBtn, gridBagConstraintForLabel);
+        mainPanel.add(submitBtn, gridBagConstraintForLabel);
 
         numAISpinner.setValue(3);
         numStartingCardsSpinner.setValue(6);
 
-        getContentPane().add(jPanel);
+        getContentPane().add(mainPanel);
         setVisible(true);
     }
 

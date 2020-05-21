@@ -1,20 +1,14 @@
-package View;
+import Controller.GameController;
+import View.StartGameView;
 
-import model.Game;
-
-import javax.swing.*;
-
-public class ViewController extends JFrame {
-
-
+public class Main {
     public static void main(String[] args) {
         StartGameView startGameWindow = new StartGameView();
-        Game game = new Game(
+        GameController game = new GameController(
                 startGameWindow.getNumPlayersSpinner(),
                 startGameWindow.getNumAISpinner(),
                 startGameWindow.getNumStartingCardsSpinner()
         );
-        GameView gameView = new GameView();
+        game.startGame();
     }
-
 }

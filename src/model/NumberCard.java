@@ -2,14 +2,14 @@ package model;
 
 public class NumberCard extends Card{
 
-    private int value;
+    private String value;
 
-    public NumberCard(int c, int v) {
+    public NumberCard(int c, String v) {
         super(c);
         value = v;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
