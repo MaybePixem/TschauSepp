@@ -12,7 +12,7 @@ public class Game {
     private ArrayList<Card> sideDeck;
     private int currentPlayer = 0;
     private int totalPlayers;
-
+    private int bauerColor = -1;
 
     public Game(int numberOfPlayers, int numberOfAI, int numberOfStartingCards) {
         totalPlayers = numberOfPlayers + numberOfAI;
@@ -94,37 +94,47 @@ public class Game {
         return null;
     }
 
-    public boolean playCard(Card c) {
+    public boolean playCard(Card c, int bauerColor) {
         if (checkValid(c)) {
-            if(c instanceof  ActionCard){
-                doCardAction(c);
-            }
             currentDeck.add(c);
             players.get(currentPlayer).getdeck().remove(c);
+            if (c instanceof NumberCard) {
+                nextPlayer(false, 0);
+            } else {
+                if (((ActionCard) c).getAction().equals("Sieben")) {
+                    nextPlayer(false, 2);
+                } else if (((ActionCard) c).getAction().equals("Acht")) {
+                    nextPlayer(true, 0);
+                } else if (((ActionCard) c).getAction().equals("Bauer")) {
+                    this.bauerColor = bauerColor;
+                    nextPlayer(false, 0);
+                }
+            }
             return true;
         }
         return false;
     }
 
-    public void doCardAction(Card c) {
-
-    }
-
     public boolean checkValid(Card c) {
-        if (c instanceof NumberCard || ((ActionCard) c).getAction().equals("Sieben") || ((ActionCard) c).getAction().equals("Acht")) {
-            return c.getColor() == currentDeck.get(currentDeck.size()).getColor()
-                    || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size())).getValue());
 
+        if (c instanceof NumberCard || ((ActionCard) c).getAction().equals("Sieben") || ((ActionCard) c).getAction().equals("Acht")) {
+            if (bauerColor != -1) {
+                return c.getColor() == currentDeck.get(currentDeck.size()).getColor()
+                        || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size())).getValue());
+            } else {
+                return c.getColor() == bauerColor
+                        || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size())).getValue());
+            }
         } else {
             return true;
         }
     }
 
     public void callTschau() {
-
+        players.get(currentPlayer).setcalledtschau(true);
     }
 
     public void callSepp() {
-
+        players.get(currentPlayer).setcalledsepp(true);
     }
 }
