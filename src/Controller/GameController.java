@@ -7,19 +7,22 @@ import javafx.stage.Stage;
 import model.Game;
 import model.Player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameController {
 
     public static final String[] NUMBERCARDS = {
-            "Ass", "König", "Ober","Under", "Banner", "Neun", "Sechs"
+            "2", "3", "4", "5", "6","9","10","A","K","Q"
     };
 
     public static final String[] ACTIONCARDS = {
-            "Sieben", "Acht", "Bauer"
+            "7", "8", "J"
     };
 
-    public static final String[] COLORS = {"Eichel", "Rosen", "Schellen", "Schilten"};
+    public static final String[] COLORS = {
+            "C", "H", "S", "D"
+    };
 
     private int numPlayers;
     private int numAIPlayers;
@@ -32,9 +35,9 @@ public class GameController {
         this.numStartingCards = numStartingCards;
     }
 
-    public void startGame() {
-        GameView gameView = new GameView();
-
+    public void startGame() throws IOException {
         game = new Game(numPlayers, numAIPlayers, numStartingCards);
+
+        GameView gameView = new GameView(game);
     }
 }

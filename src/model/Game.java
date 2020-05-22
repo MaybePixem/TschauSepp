@@ -48,12 +48,14 @@ public class Game {
 
     private ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<>();
-        for (int i = 0; i < GameController.COLORS.length; i++) {
-            for (int j = 0; j < GameController.NUMBERCARDS.length; j++) {
-                deck.add(new NumberCard(i, GameController.NUMBERCARDS[j]));
-            }
-            for (int j = 0; j < GameController.ACTIONCARDS.length; j++) {
-                deck.add(new ActionCard(i, GameController.ACTIONCARDS[j]));
+        for (int numberofFullDecks = 0; numberofFullDecks < 2; numberofFullDecks++) {
+            for (int i = 0; i < GameController.COLORS.length; i++) {
+                for (int j = 0; j < GameController.NUMBERCARDS.length; j++) {
+                    deck.add(new NumberCard(i, GameController.NUMBERCARDS[j]));
+                }
+                for (int j = 0; j < GameController.ACTIONCARDS.length; j++) {
+                    deck.add(new ActionCard(i, GameController.ACTIONCARDS[j]));
+                }
             }
         }
         Collections.shuffle(deck);
@@ -119,7 +121,7 @@ public class Game {
 
         if (c instanceof NumberCard || ((ActionCard) c).getAction().equals("Sieben") || ((ActionCard) c).getAction().equals("Acht")) {
             if (bauerColor != -1) {
-                return c.getColor() == currentDeck.get(currentDeck.size()).getColor()
+                return c.getColor() == currentDeck.get(currentDeck.size() - 1).getColor()
                         || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size())).getValue());
             } else {
                 return c.getColor() == bauerColor
@@ -136,5 +138,25 @@ public class Game {
 
     public void callSepp() {
         players.get(currentPlayer).setcalledsepp(true);
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public ArrayList<Card> getCurrentDeck() {
+        return currentDeck;
+    }
+
+    public ArrayList<Card> getSideDeck() {
+        return sideDeck;
+    }
+
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayer);
+    }
+
+    public int getBauerColor() {
+        return bauerColor;
     }
 }
