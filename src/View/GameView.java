@@ -6,6 +6,8 @@ import model.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,22 +36,20 @@ public class GameView extends JFrame {
 
         setTitle("Tschau Sepp");
         setSize(1280, 720);
+        setMinimumSize(new Dimension(400,350));
         setLocationRelativeTo(null);
-        setResizable(false);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        mainPanel = new JPanel(new BorderLayout());
-        playerDeckPanel = new JPanel();
-        playfieldPlanel = new JPanel();
-        otherPlayersPanel = new JPanel();
-
         redraw();
 
-        mainPanel.add(otherPlayersPanel, BorderLayout.NORTH);
-        mainPanel.add(playfieldPlanel, BorderLayout.CENTER);
-        mainPanel.add(playerDeckPanel, BorderLayout.SOUTH);
-
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                redraw();
+            }
+        });
 
         getContentPane().add(mainPanel);
         setVisible(true);
@@ -69,15 +69,20 @@ public class GameView extends JFrame {
     }
 
     private void redraw() {
+        mainPanel = new JPanel(new BorderLayout());
+        playerDeckPanel = new JPanel();
+        playfieldPlanel = new JPanel();
+        otherPlayersPanel = new JPanel();
+
         playfieldPlanel.add(
                 new CardImage(
                         cardImagesArr.get(game.getCurrentDeck().get(game.getCurrentDeck().size() - 1).getColor()
                                 + ((NumberCard) game.getCurrentDeck().get(game.getCurrentDeck().size() - 1)).getValue())
-                        , MAX_CARD_SIZE)
+                        , Math.min(getWidth() / 3, MAX_CARD_SIZE))
         );
 
-        int cardWidth = getWidth() / (game.getCurrentPlayer().getdecksize() + 2);
-        cardWidth = cardWidth > MAX_CARD_SIZE ? MAX_CARD_SIZE : cardWidth;
+        int cardWidth = Math.min(getWidth() / (game.getCurrentPlayer().getdecksize() + 2), MAX_CARD_SIZE);
+
         for (Card c :
                 game.getCurrentPlayer().getdeck()) {
             CardImage img;
@@ -93,6 +98,13 @@ public class GameView extends JFrame {
                 game.getPlayers()) {
             otherPlayersPanel.add(new JLabel(Integer.toString(p.getdecksize())));
         }
+
+        mainPanel.add(otherPlayersPanel, BorderLayout.NORTH);
+        mainPanel.add(playfieldPlanel, BorderLayout.CENTER);
+        mainPanel.add(playerDeckPanel, BorderLayout.SOUTH);
+        getContentPane().removeAll();
+        getContentPane().add(mainPanel);
+        getContentPane().revalidate();
     }
 
 }

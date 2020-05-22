@@ -11,7 +11,7 @@ public class CardImage extends JPanel {
     private int height;
 
 
-    public CardImage(BufferedImage img, int width) {
+    CardImage(BufferedImage img, int width) {
         this.img = img;
 
         float imgWidth = img.getWidth();
@@ -21,6 +21,7 @@ public class CardImage extends JPanel {
         this.width = width;
         this.height = (int) (width * ratio);
         setPreferredSize(new Dimension(width, height));
+
     }
 
     @Override
