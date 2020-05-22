@@ -122,10 +122,10 @@ public class Game {
         if (c instanceof NumberCard || ((ActionCard) c).getAction().equals("Sieben") || ((ActionCard) c).getAction().equals("Acht")) {
             if (bauerColor != -1) {
                 return c.getColor() == currentDeck.get(currentDeck.size() - 1).getColor()
-                        || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size())).getValue());
+                        || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size()-1)).getValue());
             } else {
                 return c.getColor() == bauerColor
-                        || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size())).getValue());
+                        || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size()-1)).getValue());
             }
         } else {
             return true;
