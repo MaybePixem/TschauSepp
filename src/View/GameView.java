@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class GameView extends JFrame {
 
-    private final int MAX_CARD_SIZE = 120;
+    private final int MAX_CARD_SIZE = 150;
 
     private Game game;
     private HashMap<String, BufferedImage> cardImagesArr = new HashMap<>();
@@ -36,7 +36,7 @@ public class GameView extends JFrame {
 
         setTitle("Tschau Sepp");
         setSize(1280, 720);
-        setMinimumSize(new Dimension(400,350));
+        setMinimumSize(new Dimension(400, 350));
         setLocationRelativeTo(null);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -66,6 +66,7 @@ public class GameView extends JFrame {
                 cardImagesArr.put(i + GameController.ACTIONCARDS[j], ImageIO.read(new File(filePath + "/src/assets/images/" + GameController.ACTIONCARDS[j] + GameController.COLORS[i] + ".png")));
             }
         }
+        cardImagesArr.put("blankCard", ImageIO.read(new File(filePath + "/src/assets/images/blankCard.png")));
     }
 
     private void redraw() {
@@ -74,6 +75,7 @@ public class GameView extends JFrame {
         playfieldPlanel = new JPanel();
         otherPlayersPanel = new JPanel();
 
+        playfieldPlanel.add(new CardImage(cardImagesArr.get("blankCard"), Math.min(getWidth() / 3, MAX_CARD_SIZE)));
         playfieldPlanel.add(
                 new CardImage(
                         cardImagesArr.get(game.getCurrentDeck().get(game.getCurrentDeck().size() - 1).getColor()

@@ -26,6 +26,15 @@ public class CardImage extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        g.drawImage(img.getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0, this);
+        Graphics2D g2draw = (Graphics2D) g;
+
+        g2draw.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        g2draw.setRenderingHint(RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_QUALITY);
+        g2draw.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
+                RenderingHints.VALUE_STROKE_PURE);
+
+        g2draw.drawImage(img.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, this);
     }
 }
