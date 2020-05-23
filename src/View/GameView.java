@@ -16,6 +16,8 @@ import java.util.HashMap;
 public class GameView extends JFrame {
 
     private final int MAX_CARD_SIZE = 150;
+    private final int BLANK_CARD_INDEX = -1;
+    private final int DECK_CARD_INDEX = -2;
 
     private Game game;
     private HashMap<String, BufferedImage> cardImagesArr = new HashMap<>();
@@ -60,10 +62,15 @@ public class GameView extends JFrame {
         String filePath = new File("").getAbsolutePath();
         for (int i = 0; i < GameController.COLORS.length; i++) {
             for (int j = 0; j < GameController.NUMBERCARDS.length; j++) {
-                cardImagesArr.put(i + GameController.NUMBERCARDS[j], ImageIO.read(new File(filePath + "/src/assets/images/" + GameController.NUMBERCARDS[j] + GameController.COLORS[i] + ".png")));
+                cardImagesArr.put(
+                        i + GameController.NUMBERCARDS[j],
+                        ImageIO.read(new File(filePath + "/src/assets/images/" + GameController.NUMBERCARDS[j] + GameController.COLORS[i] + ".png"))
+                );
             }
             for (int j = 0; j < GameController.ACTIONCARDS.length; j++) {
-                cardImagesArr.put(i + GameController.ACTIONCARDS[j], ImageIO.read(new File(filePath + "/src/assets/images/" + GameController.ACTIONCARDS[j] + GameController.COLORS[i] + ".png")));
+                cardImagesArr.put(i + GameController.ACTIONCARDS[j],
+                        ImageIO.read(new File(filePath + "/src/assets/images/" + GameController.ACTIONCARDS[j] + GameController.COLORS[i] + ".png"))
+                );
             }
         }
         cardImagesArr.put("blankCard", ImageIO.read(new File(filePath + "/src/assets/images/blankCard.png")));
@@ -75,23 +82,26 @@ public class GameView extends JFrame {
         playfieldPlanel = new JPanel();
         otherPlayersPanel = new JPanel();
 
-        playfieldPlanel.add(new CardImage(cardImagesArr.get("blankCard"), Math.min(getWidth() / 3, MAX_CARD_SIZE)));
+        playfieldPlanel.add(new CardImage(cardImagesArr.get("blankCard"), Math.min(getWidth() / 3, MAX_CARD_SIZE), BLANK_CARD_INDEX, this));
         playfieldPlanel.add(
                 new CardImage(
                         cardImagesArr.get(game.getCurrentDeck().get(game.getCurrentDeck().size() - 1).getColor()
                                 + ((NumberCard) game.getCurrentDeck().get(game.getCurrentDeck().size() - 1)).getValue())
-                        , Math.min(getWidth() / 3, MAX_CARD_SIZE))
+                        , Math.min(getWidth() / 3, MAX_CARD_SIZE)
+                        , DECK_CARD_INDEX
+                        , this
+                )
         );
 
         int cardWidth = Math.min(getWidth() / (game.getCurrentPlayer().getdecksize() + 2), MAX_CARD_SIZE);
 
-        for (Card c :
-                game.getCurrentPlayer().getdeck()) {
+        for (int i = 0; i < game.getCurrentPlayer().getdeck().size(); i++) {
+            Card c = game.getCurrentPlayer().getdeck().get(i);
             CardImage img;
             if (c instanceof ActionCard) {
-                img = new CardImage(cardImagesArr.get(c.getColor() + ((ActionCard) c).getAction()), cardWidth);
+                img = new CardImage(cardImagesArr.get(c.getColor() + ((ActionCard) c).getAction()), cardWidth, i, this);
             } else {
-                img = new CardImage(cardImagesArr.get(c.getColor() + ((NumberCard) c).getValue()), cardWidth);
+                img = new CardImage(cardImagesArr.get(c.getColor() + ((NumberCard) c).getValue()), cardWidth, i, this);
             }
             playerDeckPanel.add(img);
         }
@@ -109,4 +119,7 @@ public class GameView extends JFrame {
         getContentPane().revalidate();
     }
 
+    void playerClickedCard(int cardIndexOnPlayerDeck) {
+        System.out.println(cardIndexOnPlayerDeck);
+    }
 }
