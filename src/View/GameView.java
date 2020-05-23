@@ -6,6 +6,8 @@ import model.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
@@ -25,6 +27,8 @@ public class GameView extends JFrame {
     private JPanel playerDeckPanel;
     private JPanel playfieldPlanel;
     private JPanel otherPlayersPanel;
+    private JButton callTschauBtn;
+    private JButton callSeppBtn;
 
     public static void main(String[] args) throws IOException {
         Game game = new Game(1, 3, 15);
@@ -42,6 +46,15 @@ public class GameView extends JFrame {
         setLocationRelativeTo(null);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        callTschauBtn = new JButton("Tschau");
+        callSeppBtn = new JButton("Sepp");
+        callTschauBtn.addActionListener(actionEvent -> {
+
+        });
+        callSeppBtn.addActionListener(actionEvent -> {
+
+        });
 
         redraw();
 
@@ -82,14 +95,14 @@ public class GameView extends JFrame {
         playfieldPlanel = new JPanel();
         otherPlayersPanel = new JPanel();
 
-        playfieldPlanel.add(new CardImage(cardImagesArr.get("blankCard"), Math.min(getWidth() / 3, MAX_CARD_SIZE), BLANK_CARD_INDEX, this));
+        playfieldPlanel.add(new CardImage(cardImagesArr.get("blankCard"), Math.min(getWidth() / 4, MAX_CARD_SIZE), BLANK_CARD_INDEX, this));
         Card currentCardOnDeck = game.getCurrentDeck().get(game.getCurrentDeck().size() - 1);
         if (currentCardOnDeck instanceof NumberCard) {
             playfieldPlanel.add(
                     new CardImage(
                             cardImagesArr.get(currentCardOnDeck.getColor()
                                     + currentCardOnDeck.getValue())
-                            , Math.min(getWidth() / 3, MAX_CARD_SIZE)
+                            , Math.min(getWidth() / 4, MAX_CARD_SIZE)
                             , DECK_CARD_INDEX
                             , this
                     )
@@ -99,12 +112,21 @@ public class GameView extends JFrame {
                     new CardImage(
                             cardImagesArr.get(currentCardOnDeck.getColor()
                                     + currentCardOnDeck.getValue())
-                            , Math.min(getWidth() / 3, MAX_CARD_SIZE)
+                            , Math.min(getWidth() / 4, MAX_CARD_SIZE)
                             , DECK_CARD_INDEX
                             , this
                     )
             );
         }
+
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.add(callTschauBtn, BorderLayout.NORTH);
+        JPanel marginPanel = new JPanel();
+        marginPanel.setPreferredSize(new Dimension(1, Math.min(getWidth() / 15, MAX_CARD_SIZE / 2)));
+        buttonPanel.add(marginPanel, BorderLayout.CENTER);
+        buttonPanel.add(callSeppBtn, BorderLayout.SOUTH);
+
+        playfieldPlanel.add(buttonPanel);
 
         int cardWidth = Math.min(getWidth() / (game.getCurrentPlayer().getdecksize() + 2), MAX_CARD_SIZE);
 
