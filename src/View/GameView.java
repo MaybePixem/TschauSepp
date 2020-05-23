@@ -31,7 +31,7 @@ public class GameView extends JFrame {
     private JButton callSeppBtn;
 
     public static void main(String[] args) throws IOException {
-        Game game = new Game(1, 3, 6);
+        Game game = new Game(1, 3, 1);
         new GameView(game);
     }
 

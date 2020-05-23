@@ -149,8 +149,24 @@ public class Game {
      */
     public boolean playCard(Card c, int bauerColor) {
         if (checkValid(c)) {
+            if (getCurrentPlayer().getdeck().size() == 2) {
+                if (!getCurrentPlayer().hasCalledTschau()) {
+                    getCurrentPlayer().getdeck().add(drawCard());
+                    nextPlayer(false, 0);
+
+                    return true;
+                }
+            } else if (getCurrentPlayer().getdeck().size() == 1) {
+                if (!getCurrentPlayer().hasCalledSepp()) {
+                    getCurrentPlayer().getdeck().add(drawCard());
+                    nextPlayer(false, 0);
+                    return true;
+                }
+            }
+
             currentDeck.add(c);
             players.get(currentPlayer).getdeck().remove(c);
+
             if (c instanceof NumberCard) {
                 nextPlayer(false, 0);
             } else {
