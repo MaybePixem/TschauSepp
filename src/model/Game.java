@@ -189,17 +189,29 @@ public class Game {
     }
 
     /**
-     * Sets the calledTschau to true for the current player.
+     * Sets the calledTschau to true for the current player if he has 2 cards.
+     *
+     * @return has the flag been set
      */
-    public void callTschau() {
-        players.get(currentPlayer).setcalledTschau(true);
+    public boolean callTschau() {
+        if (getCurrentPlayer().getdeck().size() == 2) {
+            players.get(currentPlayer).setcalledTschau(true);
+            return true;
+        }
+        return false;
     }
 
     /**
-     * Sets the calledSepp to true for the current player.
+     * Sets the calledSepp to true for the current player if he has 1 card.
+     *
+     * @return has the flag been set
      */
-    public void callSepp() {
-        players.get(currentPlayer).setcalledSepp(true);
+    public boolean callSepp() {
+        if (getCurrentPlayer().getdeck().size() == 1) {
+            players.get(currentPlayer).setcalledSepp(true);
+            return true;
+        }
+        return false;
     }
 
     /**
