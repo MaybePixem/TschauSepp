@@ -154,17 +154,13 @@ public class Game {
             if (c instanceof NumberCard) {
                 nextPlayer(false, 0);
             } else {
-                switch (((ActionCard) c).getAction()) {
-                    case "Sieben":
-                        nextPlayer(false, 2);
-                        break;
-                    case "Acht":
-                        nextPlayer(true, 0);
-                        break;
-                    case "Bauer":
-                        this.bauerColor = bauerColor;
-                        nextPlayer(false, 0);
-                        break;
+                if (c.getValue().equals(GameController.ACTIONCARDS[0])) {
+                    nextPlayer(false, 2);
+                } else if (c.getValue().equals(GameController.ACTIONCARDS[1])) {
+                    nextPlayer(true, 0);
+                } else if (c.getValue().equals(GameController.ACTIONCARDS[2])) {
+                    this.bauerColor = bauerColor;
+                    nextPlayer(false, 0);
                 }
             }
             return true;
@@ -178,15 +174,14 @@ public class Game {
      * @param c The Card to be checked.
      * @return if it is valid.
      */
-    public boolean checkValid(Card c) {
-
-        if (c instanceof NumberCard || ((ActionCard) c).getAction().equals("Sieben") || ((ActionCard) c).getAction().equals("Acht")) {
-            if (bauerColor != -1) {
+    private boolean checkValid(Card c) {
+        if (!(c instanceof ActionCard && c.getValue().equals(GameController.ACTIONCARDS[2]))) {
+            if (bauerColor == -1) {
                 return c.getColor() == currentDeck.get(currentDeck.size() - 1).getColor()
-                        || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size() - 1)).getValue());
+                        || c.getValue().equals(currentDeck.get(currentDeck.size() - 1).getValue());
             } else {
                 return c.getColor() == bauerColor
-                        || ((NumberCard) c).getValue().equals(((NumberCard) currentDeck.get(currentDeck.size() - 1)).getValue());
+                        || c.getValue().equals(currentDeck.get(currentDeck.size() - 1).getValue());
             }
         } else {
             return true;

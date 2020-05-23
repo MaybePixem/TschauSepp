@@ -83,15 +83,28 @@ public class GameView extends JFrame {
         otherPlayersPanel = new JPanel();
 
         playfieldPlanel.add(new CardImage(cardImagesArr.get("blankCard"), Math.min(getWidth() / 3, MAX_CARD_SIZE), BLANK_CARD_INDEX, this));
-        playfieldPlanel.add(
-                new CardImage(
-                        cardImagesArr.get(game.getCurrentDeck().get(game.getCurrentDeck().size() - 1).getColor()
-                                + ((NumberCard) game.getCurrentDeck().get(game.getCurrentDeck().size() - 1)).getValue())
-                        , Math.min(getWidth() / 3, MAX_CARD_SIZE)
-                        , DECK_CARD_INDEX
-                        , this
-                )
-        );
+        Card currentCardOnDeck = game.getCurrentDeck().get(game.getCurrentDeck().size() - 1);
+        if (currentCardOnDeck instanceof NumberCard) {
+            playfieldPlanel.add(
+                    new CardImage(
+                            cardImagesArr.get(currentCardOnDeck.getColor()
+                                    + currentCardOnDeck.getValue())
+                            , Math.min(getWidth() / 3, MAX_CARD_SIZE)
+                            , DECK_CARD_INDEX
+                            , this
+                    )
+            );
+        } else {
+            playfieldPlanel.add(
+                    new CardImage(
+                            cardImagesArr.get(currentCardOnDeck.getColor()
+                                    + currentCardOnDeck.getValue())
+                            , Math.min(getWidth() / 3, MAX_CARD_SIZE)
+                            , DECK_CARD_INDEX
+                            , this
+                    )
+            );
+        }
 
         int cardWidth = Math.min(getWidth() / (game.getCurrentPlayer().getdecksize() + 2), MAX_CARD_SIZE);
 
@@ -99,9 +112,9 @@ public class GameView extends JFrame {
             Card c = game.getCurrentPlayer().getdeck().get(i);
             CardImage img;
             if (c instanceof ActionCard) {
-                img = new CardImage(cardImagesArr.get(c.getColor() + ((ActionCard) c).getAction()), cardWidth, i, this);
+                img = new CardImage(cardImagesArr.get(c.getColor() + c.getValue()), cardWidth, i, this);
             } else {
-                img = new CardImage(cardImagesArr.get(c.getColor() + ((NumberCard) c).getValue()), cardWidth, i, this);
+                img = new CardImage(cardImagesArr.get(c.getColor() + c.getValue()), cardWidth, i, this);
             }
             playerDeckPanel.add(img);
         }
@@ -120,6 +133,24 @@ public class GameView extends JFrame {
     }
 
     void playerClickedCard(int cardIndexOnPlayerDeck) {
-        System.out.println(cardIndexOnPlayerDeck);
+
+        switch (cardIndexOnPlayerDeck) {
+            case BLANK_CARD_INDEX:
+                game.getCurrentPlayer().getdeck().add(game.drawCard());
+                game.nextPlayer(false, 0);
+                redraw();
+                break;
+
+            case DECK_CARD_INDEX:
+                //Player can't click on the card from the main deck
+                break;
+
+            default:
+                boolean hasBeenPlaced = game.playCard(game.getCurrentPlayer().getdeck().get(cardIndexOnPlayerDeck), -1);
+                if (hasBeenPlaced) {
+                    redraw();
+                }
+                break;
+        }
     }
 }

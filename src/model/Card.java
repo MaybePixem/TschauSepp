@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Model Class for a Card. Only saves the Color.
+ * Model Class for a Card.
  *
  * @author Tim Bucher
  * @version 1.0
@@ -9,14 +9,17 @@ package model;
  */
 public abstract class Card {
     private int color;
+    private String value;
 
     /**
      * Constructor
      *
      * @param c Color of the card
+     * @param v Value of the card
      */
-    public Card(int c) {
+    Card(int c, String v) {
         color = c;
+        value = v;
     }
 
     /**
@@ -26,5 +29,23 @@ public abstract class Card {
      */
     public int getColor() {
         return color;
+    }
+
+    /**
+     * Getter for the Value
+     *
+     * @return value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * toString for the Card
+     *
+     * @return Color and Value of the Card
+     */
+    public String toString() {
+        return getColor() + " " + value;
     }
 }

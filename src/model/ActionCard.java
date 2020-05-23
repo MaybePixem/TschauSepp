@@ -9,34 +9,14 @@ package model;
  */
 public class ActionCard extends Card {
 
-    private String action;
-
     /**
      * Constructor
      *
      * @param c The Color of the Card
      * @param a The Action reference for the card
      */
-    public ActionCard(int c, String a) {
-        super(c);
-        action = a;
+    ActionCard(int c, String a) {
+        super(c, a);
     }
 
-    /**
-     * Getter for the Action
-     *
-     * @return action
-     */
-    public String getAction() {
-        return action;
-    }
-
-    /**
-     * toString for the Card
-     *
-     * @return Color and Action of the Card
-     */
-    public String toString() {
-        return getColor() + " " + action;
-    }
 }
