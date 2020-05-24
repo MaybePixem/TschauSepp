@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TschauSepp:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TschauSepp_jar</output-path>
+    <root id="archive" name="TschauSepp.jar">
+      <element id="module-output" name="TschauSepp" />
+    </root>
+  </artifact>
+</component>
