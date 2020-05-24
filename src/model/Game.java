@@ -97,6 +97,13 @@ public class Game {
      * @return first card from the side deck
      */
     public Card drawCard() {
+        if (sideDeck.size() <= 1) {
+            Card tempCard = currentDeck.remove(currentDeck.size() - 1);
+            sideDeck.addAll(currentDeck);
+            currentDeck.clear();
+            currentDeck.add(tempCard);
+            Collections.shuffle(sideDeck);
+        }
         return sideDeck.remove(0);
     }
 
