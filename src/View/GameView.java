@@ -8,9 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -78,21 +76,20 @@ public class GameView extends JFrame {
     }
 
     private void readImages() throws IOException {
-        String filePath = new File("").getAbsolutePath();
         for (int i = 0; i < GameController.COLORS.length; i++) {
             for (int j = 0; j < GameController.NUMBERCARDS.length; j++) {
                 cardImagesArr.put(
                         i + GameController.NUMBERCARDS[j],
-                        ImageIO.read(new File(filePath + "/src/assets/images/" + GameController.NUMBERCARDS[j] + GameController.COLORS[i] + ".png"))
+                        ImageIO.read(getClass().getResource("/resources/images/" + GameController.NUMBERCARDS[j] + GameController.COLORS[i] + ".png"))
                 );
             }
             for (int j = 0; j < GameController.ACTIONCARDS.length; j++) {
                 cardImagesArr.put(i + GameController.ACTIONCARDS[j],
-                        ImageIO.read(new File(filePath + "/src/assets/images/" + GameController.ACTIONCARDS[j] + GameController.COLORS[i] + ".png"))
+                        ImageIO.read(getClass().getResource("/resources/images/" + GameController.ACTIONCARDS[j] + GameController.COLORS[i] + ".png"))
                 );
             }
         }
-        cardImagesArr.put("blankCard", ImageIO.read(new File(filePath + "/src/assets/images/blankCard.png")));
+        cardImagesArr.put("blankCard", ImageIO.read(getClass().getResource("/resources/images/blankCard.png")));
     }
 
     private void redraw() {

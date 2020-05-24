@@ -1,10 +1,12 @@
 import Controller.GameController;
 import View.StartGameView;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        new Main();
         StartGameView startGameWindow = new StartGameView();
         GameController game = new GameController(
                 startGameWindow.getNumPlayersSpinner(),
@@ -13,4 +15,5 @@ public class Main {
         );
         game.startGame();
     }
+
 }
