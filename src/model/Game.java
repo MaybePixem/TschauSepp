@@ -12,8 +12,6 @@ import java.util.Collections;
  * Saves all information for the Game and handles all the moves that the Player and events that take place in the game.
  *
  * @author Tim Bucher
- * @version 1.0
- * @since 23.05.2020
  */
 public class Game {
 

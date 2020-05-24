@@ -1,5 +1,10 @@
 package model.card;
 
+/**
+ * Enum Class for the Card Value also contains the String to get the image, the points of the card and if its a action card.
+ *
+ * @author Tim Bucher
+ */
 public enum CARD_VALUE {
     SEVEN("7", 7, true),
     EIGHT("8", 8, true),
@@ -16,23 +21,45 @@ public enum CARD_VALUE {
     QUEEN("Q", 3, false);
 
     private String imageString;
-    private int value;
+    private int points;
     private boolean isActionCard;
 
-    CARD_VALUE(String imageString, int value, boolean isActionCard) {
+    /**
+     * Constructor
+     *
+     * @param imageString  The String for the image
+     * @param points       The amount of points the card gives
+     * @param isActionCard Flag if its an action card
+     */
+    CARD_VALUE(String imageString, int points, boolean isActionCard) {
         this.imageString = imageString;
-        this.value = value;
+        this.points = points;
         this.isActionCard = isActionCard;
     }
 
+    /**
+     * Getter for the Image String
+     *
+     * @return imageString
+     */
     public String toImageString() {
         return imageString;
     }
 
-    public int getValue() {
-        return value;
+    /**
+     * Getter for the points
+     *
+     * @return points
+     */
+    public int getPoints() {
+        return points;
     }
 
+    /**
+     * Getter for the action card flag
+     *
+     * @return isActionCard
+     */
     public boolean isActionCard() {
         return isActionCard;
     }

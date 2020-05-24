@@ -4,8 +4,6 @@ package model.card;
  * Model Class for a Card.
  *
  * @author Tim Bucher
- * @version 1.0
- * @since 23.05.2020
  */
 public class Card {
     private CARD_COLOR color;
@@ -47,5 +45,14 @@ public class Card {
      */
     public String toString() {
         return getColor() + " " + value;
+    }
+
+    /**
+     * Getter for the points that card gives
+     *
+     * @return points
+     */
+    public int getPoints() {
+        return value.getPoints();
     }
 }
