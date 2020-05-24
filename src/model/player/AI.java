@@ -1,4 +1,6 @@
-package model;
+package model.player;
+
+import model.card.Card;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package model;
+package model.card;
 
 /**
  * Model Class for a Card.
@@ -8,8 +8,8 @@ package model;
  * @since 23.05.2020
  */
 public abstract class Card {
-    private int color;
-    private String value;
+    private CARD_COLOR color;
+    private CARD_VALUE value;
 
     /**
      * Constructor
@@ -17,7 +17,7 @@ public abstract class Card {
      * @param c Color of the card
      * @param v Value of the card
      */
-    Card(int c, String v) {
+    Card(CARD_COLOR c, CARD_VALUE v) {
         color = c;
         value = v;
     }
@@ -27,7 +27,7 @@ public abstract class Card {
      *
      * @return color
      */
-    public int getColor() {
+    public CARD_COLOR getColor() {
         return color;
     }
 
@@ -36,7 +36,7 @@ public abstract class Card {
      *
      * @return value
      */
-    public String getValue() {
+    public CARD_VALUE getValue() {
         return value;
     }
 

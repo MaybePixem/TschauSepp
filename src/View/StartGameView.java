@@ -16,7 +16,7 @@ public class StartGameView extends JDialog {
     private JSpinner numPlayersSpinner;
     private JSpinner numAISpinner;
     private JSpinner numStartingCardsSpinner;
-    JButton submitBtn;
+    private JButton submitBtn;
 
 
     public StartGameView() throws HeadlessException {
@@ -25,6 +25,7 @@ public class StartGameView extends JDialog {
         setLocationRelativeTo(null);
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         JPanel mainPanel = new JPanel();
         Border border = mainPanel.getBorder();
@@ -71,12 +72,7 @@ public class StartGameView extends JDialog {
         gridBagConstraintForLabel.insets = new Insets(0, 0, 0, 0);
         gridBagConstraintForLabel.gridx = 1;
         gridBagConstraintForLabel.gridy = 3;
-        submitBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                dispose();
-            }
-        });
+        submitBtn.addActionListener(actionEvent -> dispose());
         mainPanel.add(submitBtn, gridBagConstraintForLabel);
 
         numAISpinner.setValue(3);

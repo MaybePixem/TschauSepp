@@ -1,13 +1,11 @@
 package View;
 
-import model.AI;
+import model.player.AI;
 import model.Game;
-import model.Player;
+import model.player.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class GameOverView extends JDialog {

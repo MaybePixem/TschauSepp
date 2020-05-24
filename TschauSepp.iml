@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="IntelliGuard" name="Obfuscation">
+      <configuration>
+        <option name="yGuardJar" value="C:\Users\Tim\Downloads\yguard-2.7.1\yguard-2.7.1\lib\yguard.jar" />
+        <option name="inFile" value="C:\Users\Tim\IdeaProjects\TschauSepp\out\artifacts\TschauSepp_jar\TschauSepdp.jar" />
+        <option name="outFile" value="C:\Users\Tim\IdeaProjects\TschauSepp\out\artifacts\TschauSepp_jar\TschauSepp2.jar" />
+        <option name="mainclass" value="Main" />
+        <option name="conservemanifest" value="true" />
+        <option name="namingScheme" value="best" />
+        <option name="namingSafety" value="illegal" />
+        <option name="jarConfig">
+          <JarConfig>
+            <option name="jarEntries">
+              <list>
+                <option value="C:\Users\Tim\IdeaProjects\TschauSepp\out\production\TschauSepp" />
+              </list>
+            </option>
+          </JarConfig>
+        </option>
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">

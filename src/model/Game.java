@@ -1,6 +1,8 @@
 package model;
 
-import Controller.GameController;
+import model.card.*;
+import model.player.AI;
+import model.player.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +22,7 @@ public class Game {
     private ArrayList<Card> currentDeck = new ArrayList<>();
     private ArrayList<Card> sideDeck;
     private int currentPlayer = 0;
-    private int bauerColor = -1;
+    private CARD_COLOR bauerColor = null;
 
     /**
      * Constructor
@@ -77,12 +79,13 @@ public class Game {
     private ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<>();
         for (int numberofFullDecks = 0; numberofFullDecks < 2; numberofFullDecks++) {
-            for (int i = 0; i < GameController.COLORS.length; i++) {
-                for (int j = 0; j < GameController.NUMBERCARDS.length; j++) {
-                    deck.add(new NumberCard(i, GameController.NUMBERCARDS[j]));
-                }
-                for (int j = 0; j < GameController.ACTIONCARDS.length; j++) {
-                    deck.add(new ActionCard(i, GameController.ACTIONCARDS[j]));
+            for (int i = 0; i < CARD_COLOR.values().length; i++) {
+                for (int j = 0; j < CARD_VALUE.values().length; j++) {
+                    if (CARD_VALUE.values()[j].isActionCard()) {
+                        deck.add(new ActionCard(CARD_COLOR.values()[i], CARD_VALUE.values()[j]));
+                    } else {
+                        deck.add(new NumberCard(CARD_COLOR.values()[i], CARD_VALUE.values()[j]));
+                    }
                 }
             }
         }
@@ -147,7 +150,7 @@ public class Game {
      * @param bauerColor The Color that the player has chosen if the placed card was a color-choosing-action-card
      * @return if the card has been placed
      */
-    public boolean playCard(Card c, int bauerColor) {
+    public boolean playCard(Card c, CARD_COLOR bauerColor) {
         if (checkValid(c)) {
             if (getCurrentPlayer().getdeck().size() == 2) {
                 if (!getCurrentPlayer().hasCalledTschau()) {
@@ -173,11 +176,11 @@ public class Game {
             if (c instanceof NumberCard) {
                 nextPlayer(false, 0);
             } else {
-                if (c.getValue().equals(GameController.ACTIONCARDS[0])) {
+                if (c.getValue() == CARD_VALUE.SEVEN) {
                     nextPlayer(false, 2);
-                } else if (c.getValue().equals(GameController.ACTIONCARDS[1])) {
+                } else if (c.getValue() == CARD_VALUE.EIGHT) {
                     nextPlayer(true, 0);
-                } else if (c.getValue().equals(GameController.ACTIONCARDS[2])) {
+                } else if (c.getValue() == CARD_VALUE.JACK) {
                     this.bauerColor = bauerColor;
                     nextPlayer(false, 0);
                 }
@@ -206,13 +209,13 @@ public class Game {
      * @return if it is valid.
      */
     private boolean checkValid(Card c) {
-        if (!(c instanceof ActionCard && c.getValue().equals(GameController.ACTIONCARDS[2]))) {
-            if (bauerColor == -1) {
+        if (!(c instanceof ActionCard && c.getValue() == CARD_VALUE.JACK)) {
+            if (bauerColor == null) {
                 return c.getColor() == currentDeck.get(currentDeck.size() - 1).getColor()
-                        || c.getValue().equals(currentDeck.get(currentDeck.size() - 1).getValue());
+                        || c.getValue() == currentDeck.get(currentDeck.size() - 1).getValue();
             } else {
                 return c.getColor() == bauerColor
-                        || c.getValue().equals(currentDeck.get(currentDeck.size() - 1).getValue());
+                        || c.getValue() == currentDeck.get(currentDeck.size() - 1).getValue();
             }
         } else {
             return true;
@@ -286,7 +289,7 @@ public class Game {
      *
      * @return bauerColor
      */
-    public int getBauerColor() {
+    public CARD_COLOR getBauerColor() {
         return bauerColor;
     }
 

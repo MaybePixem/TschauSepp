@@ -1,4 +1,4 @@
-package model;
+package model.card;
 
 /**
  * Model Class for an Card that doesn't perform an action when placed. For example 1.
@@ -15,7 +15,7 @@ public class NumberCard extends Card {
      * @param c The color of the card
      * @param v The value of the card
      */
-    NumberCard(int c, String v) {
+    public NumberCard(CARD_COLOR c, CARD_VALUE v) {
         super(c, v);
     }
 

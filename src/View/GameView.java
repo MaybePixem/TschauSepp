@@ -1,7 +1,8 @@
 package View;
 
-import Controller.GameController;
 import model.*;
+import model.card.*;
+import model.player.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -29,7 +30,7 @@ public class GameView extends JFrame {
     private JButton callSeppBtn;
 
     public static void main(String[] args) throws IOException {
-        Game game = new Game(1, 3, 1);
+        Game game = new Game(1, 3, 6);
         new GameView(game);
     }
 
@@ -45,6 +46,7 @@ public class GameView extends JFrame {
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        callTschauBtn = new JButton("Tschau");
         callTschauBtn = new JButton("Tschau");
         callSeppBtn = new JButton("Sepp");
         callTschauBtn.addActionListener(actionEvent -> {
@@ -76,20 +78,18 @@ public class GameView extends JFrame {
     }
 
     private void readImages() throws IOException {
-        for (int i = 0; i < GameController.COLORS.length; i++) {
-            for (int j = 0; j < GameController.NUMBERCARDS.length; j++) {
-                cardImagesArr.put(
-                        i + GameController.NUMBERCARDS[j],
-                        ImageIO.read(getClass().getResource("/resources/images/" + GameController.NUMBERCARDS[j] + GameController.COLORS[i] + ".png"))
-                );
-            }
-            for (int j = 0; j < GameController.ACTIONCARDS.length; j++) {
-                cardImagesArr.put(i + GameController.ACTIONCARDS[j],
-                        ImageIO.read(getClass().getResource("/resources/images/" + GameController.ACTIONCARDS[j] + GameController.COLORS[i] + ".png"))
+        for (int i = 0; i < CARD_COLOR.values().length; i++) {
+            for (int j = 0; j < CARD_VALUE.values().length; j++) {
+                cardImagesArr.put(CARD_COLOR.values()[i].toImageString() + CARD_VALUE.values()[j].toImageString(),
+                        ImageIO.read(getClass().getResource("/resources/images/" + CARD_VALUE.values()[j].toImageString() + CARD_COLOR.values()[i].toImageString() + ".png"))
                 );
             }
         }
-        cardImagesArr.put("blankCard", ImageIO.read(getClass().getResource("/resources/images/blankCard.png")));
+
+        cardImagesArr.put("blankCard", ImageIO.read(
+                getClass().
+                        getResource("/resources/images/blankCard.png")))
+        ;
     }
 
     private void redraw() {
@@ -103,8 +103,8 @@ public class GameView extends JFrame {
         if (currentCardOnDeck instanceof NumberCard) {
             playfieldPlanel.add(
                     new CardImage(
-                            cardImagesArr.get(currentCardOnDeck.getColor()
-                                    + currentCardOnDeck.getValue())
+                            cardImagesArr.get(currentCardOnDeck.getColor().toImageString()
+                                    + currentCardOnDeck.getValue().toImageString())
                             , Math.min(getWidth() / 4, MAX_CARD_SIZE)
                             , DECK_CARD_INDEX
                             , this
@@ -113,8 +113,8 @@ public class GameView extends JFrame {
         } else {
             playfieldPlanel.add(
                     new CardImage(
-                            cardImagesArr.get(currentCardOnDeck.getColor()
-                                    + currentCardOnDeck.getValue())
+                            cardImagesArr.get(currentCardOnDeck.getColor().toImageString()
+                                    + currentCardOnDeck.getValue().toImageString())
                             , Math.min(getWidth() / 4, MAX_CARD_SIZE)
                             , DECK_CARD_INDEX
                             , this
@@ -137,9 +137,9 @@ public class GameView extends JFrame {
             Card c = game.getCurrentPlayer().getdeck().get(i);
             CardImage img;
             if (c instanceof ActionCard) {
-                img = new CardImage(cardImagesArr.get(c.getColor() + c.getValue()), cardWidth, i, this);
+                img = new CardImage(cardImagesArr.get(c.getColor().toImageString() + c.getValue().toImageString()), cardWidth, i, this);
             } else {
-                img = new CardImage(cardImagesArr.get(c.getColor() + c.getValue()), cardWidth, i, this);
+                img = new CardImage(cardImagesArr.get(c.getColor().toImageString() + c.getValue().toImageString()), cardWidth, i, this);
             }
             playerDeckPanel.add(img);
         }
@@ -174,7 +174,7 @@ public class GameView extends JFrame {
                 break;
 
             default:
-                boolean hasBeenPlaced = game.playCard(game.getCurrentPlayer().getdeck().get(cardIndexOnPlayerDeck), -1);
+                boolean hasBeenPlaced = game.playCard(game.getCurrentPlayer().getdeck().get(cardIndexOnPlayerDeck), null);
                 if (hasBeenPlaced) {
                     Player winner = game.getWinningPlayer();
                     if (Objects.isNull(winner))

@@ -1,4 +1,4 @@
-package model;
+package model.card;
 
 /**
  * Model Class for an Card that performs an Action when placed. For example 7.
@@ -15,7 +15,7 @@ public class ActionCard extends Card {
      * @param c The Color of the Card
      * @param a The Action reference for the card
      */
-    ActionCard(int c, String a) {
+    public ActionCard(CARD_COLOR c, CARD_VALUE a) {
         super(c, a);
     }
 
