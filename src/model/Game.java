@@ -16,10 +16,10 @@ import java.util.Collections;
 public class Game {
 
     private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> finishedPlayers = new ArrayList<>();
     private ArrayList<Card> currentDeck = new ArrayList<>();
     private ArrayList<Card> sideDeck;
     private int currentPlayer = 0;
-    private int totalPlayers;
     private int bauerColor = -1;
 
     /**
@@ -32,7 +32,7 @@ public class Game {
      * @param numberOfStartingCards Number of Cards that the Players start with
      */
     public Game(int numberOfPlayers, int numberOfAI, int numberOfStartingCards) {
-        totalPlayers = numberOfPlayers + numberOfAI;
+        int totalPlayers = numberOfPlayers + numberOfAI;
 
         sideDeck = createDeck();
 
@@ -41,7 +41,7 @@ public class Game {
             players.add(player);
         }
         for (int i = 0; i < numberOfAI; i++) {
-            Player ai = new Player(createDeckForPlayer(numberOfStartingCards));
+            Player ai = new AI(createDeckForPlayer(numberOfStartingCards));
             players.add(ai);
         }
 
@@ -106,6 +106,7 @@ public class Game {
      * @param pickup how many cards has the next player to pickup
      */
     public void nextPlayer(boolean skip, int pickup) {
+        int totalPlayers = players.size();
         if (skip) {
             if (currentPlayer + 2 >= totalPlayers) {
                 if (currentPlayer + 1 >= totalPlayers) {
@@ -135,7 +136,6 @@ public class Game {
                 players) {
             if (p.getdeck().size() == 0)
                 return p;
-            break;
         }
         return null;
     }
@@ -152,13 +152,16 @@ public class Game {
             if (getCurrentPlayer().getdeck().size() == 2) {
                 if (!getCurrentPlayer().hasCalledTschau()) {
                     getCurrentPlayer().getdeck().add(drawCard());
+                    getCurrentPlayer().getdeck().add(drawCard());
                     nextPlayer(false, 0);
 
                     return true;
                 }
             } else if (getCurrentPlayer().getdeck().size() == 1) {
                 if (!getCurrentPlayer().hasCalledSepp()) {
-                    getCurrentPlayer().getdeck().add(drawCard());
+                    for (int i = 0; i < 4; i++) {
+                        getCurrentPlayer().getdeck().add(drawCard());
+                    }
                     nextPlayer(false, 0);
                     return true;
                 }
@@ -182,6 +185,18 @@ public class Game {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Moves a Player to the finishedPlayers List.
+     *
+     * @param p The Player to be moved
+     */
+    public void setPlayerToFinished(Player p) {
+        finishedPlayers.add(p);
+        players.remove(p);
+        if (currentPlayer >= players.size())
+            currentPlayer = players.size() - 1;
     }
 
     /**
@@ -273,5 +288,14 @@ public class Game {
      */
     public int getBauerColor() {
         return bauerColor;
+    }
+
+    /**
+     * Getter for the finished Players
+     *
+     * @return finishedPlayers
+     */
+    public ArrayList<Player> getFinishedPlayers() {
+        return finishedPlayers;
     }
 }
