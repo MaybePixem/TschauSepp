@@ -7,7 +7,7 @@ package model.card;
  * @version 1.0
  * @since 23.05.2020
  */
-public abstract class Card {
+public class Card {
     private CARD_COLOR color;
     private CARD_VALUE value;
 
@@ -17,7 +17,7 @@ public abstract class Card {
      * @param c Color of the card
      * @param v Value of the card
      */
-    Card(CARD_COLOR c, CARD_VALUE v) {
+    public Card(CARD_COLOR c, CARD_VALUE v) {
         color = c;
         value = v;
     }

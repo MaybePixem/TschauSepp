@@ -100,27 +100,16 @@ public class GameView extends JFrame {
 
         playfieldPlanel.add(new CardImage(cardImagesArr.get("blankCard"), Math.min(getWidth() / 4, MAX_CARD_SIZE), BLANK_CARD_INDEX, this));
         Card currentCardOnDeck = game.getCurrentDeck().get(game.getCurrentDeck().size() - 1);
-        if (currentCardOnDeck instanceof NumberCard) {
-            playfieldPlanel.add(
-                    new CardImage(
-                            cardImagesArr.get(currentCardOnDeck.getColor().toImageString()
-                                    + currentCardOnDeck.getValue().toImageString())
-                            , Math.min(getWidth() / 4, MAX_CARD_SIZE)
-                            , DECK_CARD_INDEX
-                            , this
-                    )
-            );
-        } else {
-            playfieldPlanel.add(
-                    new CardImage(
-                            cardImagesArr.get(currentCardOnDeck.getColor().toImageString()
-                                    + currentCardOnDeck.getValue().toImageString())
-                            , Math.min(getWidth() / 4, MAX_CARD_SIZE)
-                            , DECK_CARD_INDEX
-                            , this
-                    )
-            );
-        }
+        playfieldPlanel.add(
+                new CardImage(
+                        cardImagesArr.get(currentCardOnDeck.getColor().toImageString()
+                                + currentCardOnDeck.getValue().toImageString())
+                        , Math.min(getWidth() / 4, MAX_CARD_SIZE)
+                        , DECK_CARD_INDEX
+                        , this
+                )
+        );
+
 
         JPanel buttonPanel = new JPanel(new BorderLayout());
         buttonPanel.add(callTschauBtn, BorderLayout.NORTH);
@@ -136,11 +125,7 @@ public class GameView extends JFrame {
         for (int i = 0; i < game.getCurrentPlayer().getdeck().size(); i++) {
             Card c = game.getCurrentPlayer().getdeck().get(i);
             CardImage img;
-            if (c instanceof ActionCard) {
-                img = new CardImage(cardImagesArr.get(c.getColor().toImageString() + c.getValue().toImageString()), cardWidth, i, this);
-            } else {
-                img = new CardImage(cardImagesArr.get(c.getColor().toImageString() + c.getValue().toImageString()), cardWidth, i, this);
-            }
+            img = new CardImage(cardImagesArr.get(c.getColor().toImageString() + c.getValue().toImageString()), cardWidth, i, this);
             playerDeckPanel.add(img);
         }
 

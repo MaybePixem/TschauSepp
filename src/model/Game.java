@@ -48,7 +48,7 @@ public class Game {
         }
 
         currentDeck.add(drawCard());
-        while (!(currentDeck.get(0) instanceof NumberCard)) {
+        while (currentDeck.get(0).getValue().isActionCard()) {
             sideDeck.add(currentDeck.get(0));
             currentDeck.remove(0);
             currentDeck.add(drawCard());
@@ -78,13 +78,13 @@ public class Game {
      */
     private ArrayList<Card> createDeck() {
         ArrayList<Card> deck = new ArrayList<>();
-        for (int numberofFullDecks = 0; numberofFullDecks < 2; numberofFullDecks++) {
+        for (int numberOfFullDecks = 0; numberOfFullDecks < 2; numberOfFullDecks++) {
             for (int i = 0; i < CARD_COLOR.values().length; i++) {
                 for (int j = 0; j < CARD_VALUE.values().length; j++) {
                     if (CARD_VALUE.values()[j].isActionCard()) {
-                        deck.add(new ActionCard(CARD_COLOR.values()[i], CARD_VALUE.values()[j]));
+                        deck.add(new Card(CARD_COLOR.values()[i], CARD_VALUE.values()[j]));
                     } else {
-                        deck.add(new NumberCard(CARD_COLOR.values()[i], CARD_VALUE.values()[j]));
+                        deck.add(new Card(CARD_COLOR.values()[i], CARD_VALUE.values()[j]));
                     }
                 }
             }
@@ -173,7 +173,7 @@ public class Game {
             currentDeck.add(c);
             players.get(currentPlayer).getdeck().remove(c);
 
-            if (c instanceof NumberCard) {
+            if (!c.getValue().isActionCard()) {
                 nextPlayer(false, 0);
             } else {
                 if (c.getValue() == CARD_VALUE.SEVEN) {
@@ -209,7 +209,9 @@ public class Game {
      * @return if it is valid.
      */
     private boolean checkValid(Card c) {
-        if (!(c instanceof ActionCard && c.getValue() == CARD_VALUE.JACK)) {
+        if (c.getValue().isActionCard() && c.getValue() == CARD_VALUE.JACK) {
+            return true;
+        } else {
             if (bauerColor == null) {
                 return c.getColor() == currentDeck.get(currentDeck.size() - 1).getColor()
                         || c.getValue() == currentDeck.get(currentDeck.size() - 1).getValue();
@@ -217,8 +219,6 @@ public class Game {
                 return c.getColor() == bauerColor
                         || c.getValue() == currentDeck.get(currentDeck.size() - 1).getValue();
             }
-        } else {
-            return true;
         }
     }
 
