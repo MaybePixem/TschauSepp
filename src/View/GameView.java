@@ -1,5 +1,6 @@
 package View;
 
+import Controller.OnlinePlayController;
 import model.*;
 import model.card.*;
 import model.player.Player;
@@ -23,6 +24,7 @@ public class GameView extends JFrame {
     private HashMap<String, BufferedImage> cardImagesArr = new HashMap<>();
 
     private boolean hideCards = false;
+    private OnlinePlayController onlinePlayController = null;
 
     private JPanel mainPanel;
     private JPanel playerDeckPanel;
@@ -77,6 +79,11 @@ public class GameView extends JFrame {
         getContentPane().add(mainPanel);
         setVisible(true);
 
+    }
+
+    public GameView(Game game, OnlinePlayController onlinePlayController) throws HeadlessException, IOException {
+        this(game);
+        this.onlinePlayController = onlinePlayController;
     }
 
     private void readImages() throws IOException {
@@ -146,7 +153,7 @@ public class GameView extends JFrame {
         getContentPane().revalidate();
     }
 
-    public void setHideCards(boolean hideCards){
+    public void setHideCards(boolean hideCards) {
         this.hideCards = hideCards;
         redraw();
     }
@@ -160,7 +167,11 @@ public class GameView extends JFrame {
             case BLANK_CARD_INDEX:
                 game.getCurrentPlayer().addCard(game.drawCard());
                 game.nextPlayer(false, 0);
-                redraw();
+                if (onlinePlayController == null) {
+                    redraw();
+                } else {
+                    onlinePlayController.endTurn();
+                }
                 break;
 
             case DECK_CARD_INDEX:
@@ -171,20 +182,34 @@ public class GameView extends JFrame {
                 boolean hasBeenPlaced = game.playCard(game.getCurrentPlayer().getDeck().get(cardIndexOnPlayerDeck), null);
                 if (hasBeenPlaced) {
                     Player winner = game.getWinningPlayer();
-                    if (Objects.isNull(winner))
-                        redraw();
-                    else {
-                        System.out.println("bruh");
-                        GameOverView gameOverView = new GameOverView(this, winner, game.getPlayers(), game.getFinishedPlayers());
-                        if (gameOverView.isEndGame()) {
-                            dispose();
-                        } else {
-                            game.setPlayerToFinished(winner);
+                    if (onlinePlayController == null) {
+                        if (Objects.isNull(winner)) {
                             redraw();
+                        } else {
+                            System.out.println("bruh");
+                            GameOverView gameOverView = new GameOverView(this, winner, game.getPlayers(), game.getFinishedPlayers());
+                            if (gameOverView.isEndGame()) {
+                                dispose();
+                            } else {
+                                game.setPlayerToFinished(winner);
+                                redraw();
+                            }
+                        }
+                    } else {
+                        if (Objects.isNull(winner)) {
+                            onlinePlayController.endTurn();
+                        } else {
+                            onlinePlayController.endGame();
+                            GameOverView gameOverView = new GameOverView(this, winner, game.getPlayers(), game.getFinishedPlayers());
+                            dispose();
                         }
                     }
                 }
                 break;
         }
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

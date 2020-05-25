@@ -9,6 +9,7 @@ import model.card.CARD_VALUE;
 import model.card.Card;
 import model.player.Player;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.DataInputStream;
@@ -33,6 +34,7 @@ public class OnlinePlayController implements Runnable {
 
     private boolean yourTurn = false;
     private boolean accepted = false;
+    private boolean startTurn = false;
     private boolean unableToCommunicateWithOpponent = false;
 
     private Game game;
@@ -63,6 +65,7 @@ public class OnlinePlayController implements Runnable {
 
     public void run() {
         while (true) {
+            System.out.println("tick");
             if (accepted) {
                 tick();
             } else {
@@ -82,25 +85,30 @@ public class OnlinePlayController implements Runnable {
     }
 
     private void tick() {
+
         if (errors >= 10) unableToCommunicateWithOpponent = true;
 
         if (!yourTurn && !unableToCommunicateWithOpponent) {
             try {
-                String game = dis.readUTF();
-                System.out.println(game);
-                yourTurn = true;
+                game = createGameObjectFromJSONObject(new JSONObject(dis.readUTF()));
 
+                yourTurn = true;
+                startTurn = true;
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println("error");
                 errors++;
             }
-        } else {
-            //MAKE TURN
+        } else if (startTurn) {
+            System.out.println("startet turn");
+            gameView.setGame(game);
+            gameView.setHideCards(false);
+            startTurn = false;
         }
     }
 
     public void startGame() throws IOException {
-        gameView = new GameView(game);
+        gameView = new GameView(game, this);
     }
 
     private void listenForServerRequest() {
@@ -147,12 +155,18 @@ public class OnlinePlayController implements Runnable {
     }
 
     public Game createGameObjectFromJSONObject(JSONObject jsonObject) {
-        int currentPlayer = 0;
         ArrayList<Player> players = new ArrayList<>();
         ArrayList<Player> finishedPlayers = new ArrayList<>();
         ArrayList<Card> currentDeck = new ArrayList<>();
         ArrayList<Card> sideDeck = new ArrayList<>();
-        CARD_COLOR bauerColor = null;
+        int currentPlayer = Integer.parseInt(jsonObject.get("currentPlayerIndex").toString());
+
+        CARD_COLOR bauerColor;
+        try {
+            bauerColor = CARD_COLOR.valueOf(jsonObject.get("bauerColor").toString());
+        } catch (JSONException e) {
+            bauerColor = null;
+        }
 
         JSONArray playersArr = new JSONArray(jsonObject.get("players").toString());
         for (int i = 0; i < playersArr.length(); i++) {
@@ -179,11 +193,13 @@ public class OnlinePlayController implements Runnable {
         }
 
         JSONArray currentDeckArr = new JSONArray(jsonObject.get("currentDeck").toString());
-        JSONObject card = new JSONObject(currentDeckArr.get(0).toString());
-        currentDeck.add(new Card(
-                CARD_COLOR.valueOf(card.get("color").toString()),
-                CARD_VALUE.valueOf(card.get("value").toString())
-        ));
+        for (int i = 0; i < currentDeckArr.length(); i++) {
+            JSONObject card = new JSONObject(currentDeckArr.get(i).toString());
+            currentDeck.add(new Card(
+                    CARD_COLOR.valueOf(card.get("color").toString()),
+                    CARD_VALUE.valueOf(card.get("value").toString())
+            ));
+        }
 
         return new Game(players, finishedPlayers, currentDeck, sideDeck, currentPlayer, bauerColor);
     }
@@ -192,4 +208,18 @@ public class OnlinePlayController implements Runnable {
         new OnlinePlayController();
     }
 
+    public void endTurn() {
+        try {
+            System.out.println("ended turn");
+            yourTurn = false;
+            gameView.setHideCards(true);
+            dos.writeUTF(new JSONObject(game).toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void endGame() {
+    }
 }

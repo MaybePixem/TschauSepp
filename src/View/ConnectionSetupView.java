@@ -42,8 +42,6 @@ public class ConnectionSetupView extends StandardInputView {
                 Double.MIN_VALUE};
         inputPanel.setLayout(panelGridBagLayout);
 
-        SpinnerModel model = new SpinnerNumberModel(25565, 1024, 65535, 1);
-
         JLabel ipLabel = new JLabel("IP Adresse:");
         addLabelToLayout(ipLabel, 0, inputPanel);
 
@@ -70,10 +68,9 @@ public class ConnectionSetupView extends StandardInputView {
         clientBtn.addActionListener(e -> {
             inputPanel.setVisible(true);
             buttonPanel.setVisible(false);
+            portInput.setText("25565");
+            ipInput.setText("192.168.1.139");
         });
-
-        portInput.setText("25565");
-        ipInput.setText("192.168.1.139");
 
         JPanel jPanel = new JPanel(new BorderLayout());
         jPanel.add(buttonPanel, BorderLayout.NORTH);

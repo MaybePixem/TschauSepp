@@ -320,6 +320,15 @@ public class Game {
     }
 
     /**
+     * Getter for the index of the current player
+     *
+     * @return index of the current Player
+     */
+    public int getCurrentPlayerIndex() {
+        return currentPlayer;
+    }
+
+    /**
      * Getter for the chosen BauerColor
      *
      * @return bauerColor
