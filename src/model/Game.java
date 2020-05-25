@@ -20,7 +20,7 @@ public class Game {
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Player> finishedPlayers = new ArrayList<>();
     private ArrayList<Card> currentDeck = new ArrayList<>();
-    private ArrayList<Card> sideDeck = new ArrayList<>();
+    private ArrayList<Card> sideDeck;
     private int currentPlayer = 0;
     private CARD_COLOR bauerColor = null;
 
@@ -57,42 +57,31 @@ public class Game {
     }
 
     /**
-     * Constructor for Online play
+     * Constructor when theres only 2 Players
      *
-     * @param jsonObject all the Data from the Game Obejct that was sent by the server
+     * @param numberOfStartingCards Number of Cards that the Players start with
      */
-    public Game(JSONObject jsonObject) {
-        currentPlayer = 0;
-        JSONArray playersArr = new JSONArray(jsonObject.get("players").toString());
-        for (int i = 0; i < playersArr.length(); i++) {
-            JSONObject player = new JSONObject(playersArr.get(i).toString());
-            ArrayList<Card> deck = new ArrayList<>();
-            JSONArray deckArr = new JSONArray(player.get("deck").toString());
-            for (int j = 0; j < deckArr.length(); j++) {
-                JSONObject card = new JSONObject(deckArr.get(j).toString());
-                deck.add(new Card(
-                        CARD_COLOR.valueOf(card.get("color").toString()),
-                        CARD_VALUE.valueOf(card.get("value").toString())
-                ));
-            }
-            players.add(new Player(deck));
-        }
+    public Game(int numberOfStartingCards) {
+        this(2, 0, numberOfStartingCards);
+    }
 
-        JSONArray sideDeckArr = new JSONArray(jsonObject.get("sideDeck").toString());
-        for (int i = 0; i < sideDeckArr.length(); i++) {
-            JSONObject card = new JSONObject(sideDeckArr.get(i).toString());
-            sideDeck.add(new Card(
-                    CARD_COLOR.valueOf(card.get("color").toString()),
-                    CARD_VALUE.valueOf(card.get("value").toString())
-            ));
-        }
-
-        JSONArray currentDeckArr = new JSONArray(jsonObject.get("currentDeck").toString());
-        JSONObject card = new JSONObject(currentDeckArr.get(0).toString());
-        currentDeck.add(new Card(
-                CARD_COLOR.valueOf(card.get("color").toString()),
-                CARD_VALUE.valueOf(card.get("value").toString())
-        ));
+    /**
+     * Constructor for Online Play
+     *
+     * @param players         players
+     * @param finishedPlayers finishedPlayers
+     * @param currentDeck     currentDeck
+     * @param sideDeck        sideDeck
+     * @param currentPlayer   currentPlayer
+     * @param bauerColor      bauerColor
+     */
+    public Game(ArrayList<Player> players, ArrayList<Player> finishedPlayers, ArrayList<Card> currentDeck, ArrayList<Card> sideDeck, int currentPlayer, CARD_COLOR bauerColor) {
+        this.players = players;
+        this.finishedPlayers = finishedPlayers;
+        this.currentDeck = currentDeck;
+        this.sideDeck = sideDeck;
+        this.currentPlayer = currentPlayer;
+        this.bauerColor = bauerColor;
     }
 
     /**

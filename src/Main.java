@@ -1,13 +1,11 @@
 import Controller.GameController;
-import View.StartGameView;
+import View.StartNormalGameView;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        new Main();
-        StartGameView startGameWindow = new StartGameView();
+        StartNormalGameView startGameWindow = new StartNormalGameView();
         GameController game = new GameController(
                 startGameWindow.getNumPlayersSpinner(),
                 startGameWindow.getNumAISpinner(),

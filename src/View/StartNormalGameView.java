@@ -1,34 +1,26 @@
 package View;
 
-import org.json.JSONPointer;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.Document;
-import javax.swing.text.DocumentFilter;
-import javax.swing.text.PlainDocument;
 import java.awt.*;
-import java.awt.event.*;
 
-public class StartGameView extends JDialog {
-
+public class StartNormalGameView extends StandardInputView {
     private JSpinner numPlayersSpinner;
     private JSpinner numAISpinner;
     private JSpinner numStartingCardsSpinner;
     private JButton submitBtn;
 
 
-    public StartGameView() throws HeadlessException {
+    public StartNormalGameView() throws HeadlessException {
         setTitle("Spiel starten");
         setSize(300, 160);
         setLocationRelativeTo(null);
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
-        
+
         JPanel mainPanel = new JPanel();
         Border border = mainPanel.getBorder();
         Border margin = new EmptyBorder(10, 10, -10, 10);
@@ -52,21 +44,21 @@ public class StartGameView extends JDialog {
 
         numPlayersSpinner = new JSpinner(model1);
         makeDigitsOnlySpinnerUsingDocumentFilter(numPlayersSpinner);
-        addSpinnerToLayout(numPlayersSpinner, 0, mainPanel);
+        addComponentToLayout(numPlayersSpinner, 0, mainPanel);
 
         JLabel numAILabel = new JLabel("Anzahl Roboter:");
         addLabelToLayout(numAILabel, 1, mainPanel);
 
         numAISpinner = new JSpinner(model2);
         makeDigitsOnlySpinnerUsingDocumentFilter(numAISpinner);
-        addSpinnerToLayout(numAISpinner, 1, mainPanel);
+        addComponentToLayout(numAISpinner, 1, mainPanel);
 
         JLabel numStartingCardsLabel = new JLabel("Anzahl Startkarten:");
         addLabelToLayout(numStartingCardsLabel, 2, mainPanel);
 
         numStartingCardsSpinner = new JSpinner(model3);
         makeDigitsOnlySpinnerUsingDocumentFilter(numStartingCardsSpinner);
-        addSpinnerToLayout(numStartingCardsSpinner, 2, mainPanel);
+        addComponentToLayout(numStartingCardsSpinner, 2, mainPanel);
 
         submitBtn = new JButton("Starten");
         GridBagConstraints gridBagConstraintForLabel = new GridBagConstraints();
@@ -85,26 +77,6 @@ public class StartGameView extends JDialog {
         setVisible(true);
     }
 
-    private void addLabelToLayout(JLabel component, int yPos, Container containingPanel) {
-
-        GridBagConstraints gridBagConstraintForLabel = new GridBagConstraints();
-        gridBagConstraintForLabel.fill = GridBagConstraints.BOTH;
-        gridBagConstraintForLabel.insets = new Insets(0, 0, 5, 5);
-        gridBagConstraintForLabel.gridx = 0;
-        gridBagConstraintForLabel.gridy = yPos;
-        containingPanel.add(component, gridBagConstraintForLabel);
-    }
-
-    private void addSpinnerToLayout(JSpinner component, int yPos, Container containingPanel) {
-
-        GridBagConstraints gridBagConstraintForLabel = new GridBagConstraints();
-        gridBagConstraintForLabel.fill = GridBagConstraints.BOTH;
-        gridBagConstraintForLabel.insets = new Insets(0, 0, 5, 0);
-        gridBagConstraintForLabel.gridx = 1;
-        gridBagConstraintForLabel.gridy = yPos;
-        containingPanel.add(component, gridBagConstraintForLabel);
-    }
-
     public int getNumPlayersSpinner() {
         return (int) numPlayersSpinner.getValue();
     }
@@ -116,25 +88,4 @@ public class StartGameView extends JDialog {
     public int getNumStartingCardsSpinner() {
         return (int) numStartingCardsSpinner.getValue();
     }
-
-    private void makeDigitsOnlySpinnerUsingDocumentFilter(JSpinner spinner) {
-        JSpinner.NumberEditor jsEditor = (JSpinner.NumberEditor) spinner.getEditor();
-        final Document jsDoc = jsEditor.getTextField().getDocument();
-        if (jsDoc instanceof PlainDocument) {
-            AbstractDocument doc = new PlainDocument() {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void setDocumentFilter(DocumentFilter filter) {
-                    if (filter instanceof SpinnerNumberFilter) {
-                        super.setDocumentFilter(filter);
-                    }
-                }
-            };
-            doc.setDocumentFilter(new SpinnerNumberFilter());
-            jsEditor.getTextField().setDocument(doc);
-        }
-    }
-
 }

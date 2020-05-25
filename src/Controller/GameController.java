@@ -14,13 +14,10 @@ public class GameController {
         game = new Game(numPlayers, numAIPlayers, numStartingCards);
     }
 
-    public GameController(JSONObject jsonObject) {
-        game = new Game(jsonObject);
-    }
-
     public void startGame() throws IOException {
         GameView gameView = new GameView(game);
     }
+
 
     public Game getGame() {
         return game;

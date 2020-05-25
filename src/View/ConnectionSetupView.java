@@ -6,7 +6,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class ConnectionSetupView extends JDialog {
+public class ConnectionSetupView extends StandardInputView {
 
     private JTextField ipInput;
     private JTextField portInput;
@@ -81,27 +81,6 @@ public class ConnectionSetupView extends JDialog {
 
         getContentPane().add(jPanel);
         setVisible(true);
-    }
-
-
-    private void addLabelToLayout(JLabel component, int yPos, Container containingPanel) {
-
-        GridBagConstraints gridBagConstraintForLabel = new GridBagConstraints();
-        gridBagConstraintForLabel.fill = GridBagConstraints.BOTH;
-        gridBagConstraintForLabel.insets = new Insets(0, 0, 5, 5);
-        gridBagConstraintForLabel.gridx = 0;
-        gridBagConstraintForLabel.gridy = yPos;
-        containingPanel.add(component, gridBagConstraintForLabel);
-    }
-
-    private void addComponentToLayout(Component component, int yPos, Container containingPanel) {
-
-        GridBagConstraints gridBagConstraintForLabel = new GridBagConstraints();
-        gridBagConstraintForLabel.fill = GridBagConstraints.BOTH;
-        gridBagConstraintForLabel.insets = new Insets(0, 0, 5, 0);
-        gridBagConstraintForLabel.gridx = 1;
-        gridBagConstraintForLabel.gridy = yPos;
-        containingPanel.add(component, gridBagConstraintForLabel);
     }
 
 

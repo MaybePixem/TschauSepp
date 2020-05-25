@@ -22,6 +22,8 @@ public class GameView extends JFrame {
     private Game game;
     private HashMap<String, BufferedImage> cardImagesArr = new HashMap<>();
 
+    private boolean hideCards = false;
+
     private JPanel mainPanel;
     private JPanel playerDeckPanel;
     private JPanel playfieldPlanel;
@@ -136,10 +138,17 @@ public class GameView extends JFrame {
 
         mainPanel.add(otherPlayersPanel, BorderLayout.NORTH);
         mainPanel.add(playfieldPlanel, BorderLayout.CENTER);
-        mainPanel.add(playerDeckPanel, BorderLayout.SOUTH);
+        if (!hideCards) {
+            mainPanel.add(playerDeckPanel, BorderLayout.SOUTH);
+        }
         getContentPane().removeAll();
         getContentPane().add(mainPanel);
         getContentPane().revalidate();
+    }
+
+    public void setHideCards(boolean hideCards){
+        this.hideCards = hideCards;
+        redraw();
     }
 
     void playerClickedCard(int cardIndexOnPlayerDeck) {
