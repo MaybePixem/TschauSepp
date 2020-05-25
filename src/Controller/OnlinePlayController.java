@@ -19,6 +19,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class OnlinePlayController implements Runnable {
 
@@ -35,12 +37,10 @@ public class OnlinePlayController implements Runnable {
     private boolean yourTurn = false;
     private boolean accepted = false;
     private boolean startTurn = false;
-    private boolean unableToCommunicateWithOpponent = false;
+    private boolean gameIsAlive = true;
 
     private Game game;
     GameView gameView;
-
-    private int errors = 0;
 
     public OnlinePlayController() {
 
@@ -48,12 +48,13 @@ public class OnlinePlayController implements Runnable {
         try {
             if (connectionSetupView.isHost()) {
                 initializeServer();
+                listenForServerRequest();
             } else {
                 ip = connectionSetupView.getIpInput();
                 port = connectionSetupView.getPortInput();
                 connect();
             }
-            thread = new Thread(this, "TschauSeppServer");
+            Thread thread = new Thread(this, "bruh");
             thread.start();
         } catch (NullPointerException e) {
             System.out.println("No Data was provided");
@@ -63,49 +64,19 @@ public class OnlinePlayController implements Runnable {
         }
     }
 
-    public void run() {
-        while (true) {
-            System.out.println("tick");
-            if (accepted) {
-                tick();
-            } else {
-                listenForServerRequest();
-            }
-        }
-    }
-
-    private void render() {
-        if (unableToCommunicateWithOpponent) {
-
-        }
-
-        if (accepted) {
-        }
-
-    }
-
     private void tick() {
-
-        if (errors >= 10) unableToCommunicateWithOpponent = true;
-
-        if (!yourTurn && !unableToCommunicateWithOpponent) {
-            try {
-                game = createGameObjectFromJSONObject(new JSONObject(dis.readUTF()));
-
-                yourTurn = true;
-                startTurn = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("error");
-                errors++;
-            }
-        } else if (startTurn) {
+        try {
+            System.out.println("start listening");
+            game = createGameObjectFromJSONObject(new JSONObject(dis.readUTF()));
             System.out.println("startet turn");
             gameView.setGame(game);
             gameView.setHideCards(false);
-            startTurn = false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("error");
         }
     }
+
 
     public void startGame() throws IOException {
         gameView = new GameView(game, this);
@@ -152,6 +123,32 @@ public class OnlinePlayController implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void run() {
+        while (gameIsAlive) {
+            tick();
+        }
+    }
+
+    public static void main(String[] args) {
+        OnlinePlayController o = new OnlinePlayController();
+    }
+
+    public void endTurn() {
+        try {
+            yourTurn = false;
+            gameView.setHideCards(true);
+            dos.writeUTF(new JSONObject(game).toString());
+            System.out.println("ended turn");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void endGame() {
     }
 
     public Game createGameObjectFromJSONObject(JSONObject jsonObject) {
@@ -202,24 +199,5 @@ public class OnlinePlayController implements Runnable {
         }
 
         return new Game(players, finishedPlayers, currentDeck, sideDeck, currentPlayer, bauerColor);
-    }
-
-    public static void main(String[] args) {
-        new OnlinePlayController();
-    }
-
-    public void endTurn() {
-        try {
-            System.out.println("ended turn");
-            yourTurn = false;
-            gameView.setHideCards(true);
-            dos.writeUTF(new JSONObject(game).toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void endGame() {
     }
 }
