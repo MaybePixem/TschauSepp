@@ -120,10 +120,10 @@ public class GameView extends JFrame {
 
         playfieldPlanel.add(buttonPanel);
 
-        int cardWidth = Math.min(getWidth() / (game.getCurrentPlayer().getdecksize() + 2), MAX_CARD_SIZE);
+        int cardWidth = Math.min(getWidth() / (game.getCurrentPlayer().getDecksize() + 2), MAX_CARD_SIZE);
 
-        for (int i = 0; i < game.getCurrentPlayer().getdeck().size(); i++) {
-            Card c = game.getCurrentPlayer().getdeck().get(i);
+        for (int i = 0; i < game.getCurrentPlayer().getDeck().size(); i++) {
+            Card c = game.getCurrentPlayer().getDeck().get(i);
             CardImage img;
             img = new CardImage(cardImagesArr.get(c.getColor().toImageString() + c.getValue().toImageString()), cardWidth, i, this);
             playerDeckPanel.add(img);
@@ -131,7 +131,7 @@ public class GameView extends JFrame {
 
         for (Player p :
                 game.getPlayers()) {
-            otherPlayersPanel.add(new JLabel(Integer.toString(p.getdecksize())));
+            otherPlayersPanel.add(new JLabel(Integer.toString(p.getDecksize())));
         }
 
         mainPanel.add(otherPlayersPanel, BorderLayout.NORTH);
@@ -149,7 +149,7 @@ public class GameView extends JFrame {
 
         switch (cardIndexOnPlayerDeck) {
             case BLANK_CARD_INDEX:
-                game.getCurrentPlayer().getdeck().add(game.drawCard());
+                game.getCurrentPlayer().addCard(game.drawCard());
                 game.nextPlayer(false, 0);
                 redraw();
                 break;
@@ -159,7 +159,7 @@ public class GameView extends JFrame {
                 break;
 
             default:
-                boolean hasBeenPlaced = game.playCard(game.getCurrentPlayer().getdeck().get(cardIndexOnPlayerDeck), null);
+                boolean hasBeenPlaced = game.playCard(game.getCurrentPlayer().getDeck().get(cardIndexOnPlayerDeck), null);
                 if (hasBeenPlaced) {
                     Player winner = game.getWinningPlayer();
                     if (Objects.isNull(winner))

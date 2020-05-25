@@ -3,6 +3,8 @@ package model;
 import model.card.*;
 import model.player.AI;
 import model.player.Player;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +20,7 @@ public class Game {
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Player> finishedPlayers = new ArrayList<>();
     private ArrayList<Card> currentDeck = new ArrayList<>();
-    private ArrayList<Card> sideDeck;
+    private ArrayList<Card> sideDeck = new ArrayList<>();
     private int currentPlayer = 0;
     private CARD_COLOR bauerColor = null;
 
@@ -52,6 +54,45 @@ public class Game {
             currentDeck.add(drawCard());
         }
 
+    }
+
+    /**
+     * Constructor for Online play
+     *
+     * @param jsonObject all the Data from the Game Obejct that was sent by the server
+     */
+    public Game(JSONObject jsonObject) {
+        currentPlayer = 0;
+        JSONArray playersArr = new JSONArray(jsonObject.get("players").toString());
+        for (int i = 0; i < playersArr.length(); i++) {
+            JSONObject player = new JSONObject(playersArr.get(i).toString());
+            ArrayList<Card> deck = new ArrayList<>();
+            JSONArray deckArr = new JSONArray(player.get("deck").toString());
+            for (int j = 0; j < deckArr.length(); j++) {
+                JSONObject card = new JSONObject(deckArr.get(j).toString());
+                deck.add(new Card(
+                        CARD_COLOR.valueOf(card.get("color").toString()),
+                        CARD_VALUE.valueOf(card.get("value").toString())
+                ));
+            }
+            players.add(new Player(deck));
+        }
+
+        JSONArray sideDeckArr = new JSONArray(jsonObject.get("sideDeck").toString());
+        for (int i = 0; i < sideDeckArr.length(); i++) {
+            JSONObject card = new JSONObject(sideDeckArr.get(i).toString());
+            sideDeck.add(new Card(
+                    CARD_COLOR.valueOf(card.get("color").toString()),
+                    CARD_VALUE.valueOf(card.get("value").toString())
+            ));
+        }
+
+        JSONArray currentDeckArr = new JSONArray(jsonObject.get("currentDeck").toString());
+        JSONObject card = new JSONObject(currentDeckArr.get(0).toString());
+        currentDeck.add(new Card(
+                CARD_COLOR.valueOf(card.get("color").toString()),
+                CARD_VALUE.valueOf(card.get("value").toString())
+        ));
     }
 
     /**
@@ -142,7 +183,7 @@ public class Game {
     public Player getWinningPlayer() {
         for (Player p :
                 players) {
-            if (p.getdeck().size() == 0)
+            if (p.getDeck().size() == 0)
                 return p;
         }
         return null;
@@ -157,18 +198,18 @@ public class Game {
      */
     public boolean playCard(Card c, CARD_COLOR bauerColor) {
         if (checkValid(c)) {
-            if (getCurrentPlayer().getdeck().size() == 2) {
-                if (!getCurrentPlayer().hasCalledTschau()) {
-                    getCurrentPlayer().getdeck().add(drawCard());
-                    getCurrentPlayer().getdeck().add(drawCard());
+            if (getCurrentPlayer().getDecksize() == 2) {
+                if (!getCurrentPlayer().getCalledTschau()) {
+                    getCurrentPlayer().addCard(drawCard());
+                    getCurrentPlayer().addCard(drawCard());
                     nextPlayer(false, 0);
 
                     return true;
                 }
-            } else if (getCurrentPlayer().getdeck().size() == 1) {
-                if (!getCurrentPlayer().hasCalledSepp()) {
+            } else if (getCurrentPlayer().getDecksize() == 1) {
+                if (!getCurrentPlayer().getCalledSepp()) {
                     for (int i = 0; i < 4; i++) {
-                        getCurrentPlayer().getdeck().add(drawCard());
+                        getCurrentPlayer().addCard(drawCard());
                     }
                     nextPlayer(false, 0);
                     return true;
@@ -176,7 +217,7 @@ public class Game {
             }
 
             currentDeck.add(c);
-            players.get(currentPlayer).getdeck().remove(c);
+            players.get(currentPlayer).removeCard(c);
 
             if (!c.getValue().isActionCard()) {
                 nextPlayer(false, 0);
@@ -233,8 +274,8 @@ public class Game {
      * @return has the flag been set
      */
     public boolean callTschau() {
-        if (getCurrentPlayer().getdeck().size() == 2) {
-            players.get(currentPlayer).setcalledTschau(true);
+        if (getCurrentPlayer().getDeck().size() == 2) {
+            players.get(currentPlayer).setCalledTschau(true);
             return true;
         }
         return false;
@@ -246,8 +287,8 @@ public class Game {
      * @return has the flag been set
      */
     public boolean callSepp() {
-        if (getCurrentPlayer().getdeck().size() == 1) {
-            players.get(currentPlayer).setcalledSepp(true);
+        if (getCurrentPlayer().getDeck().size() == 1) {
+            players.get(currentPlayer).setCalledSepp(true);
             return true;
         }
         return false;
@@ -306,4 +347,6 @@ public class Game {
     public ArrayList<Player> getFinishedPlayers() {
         return finishedPlayers;
     }
+
+
 }

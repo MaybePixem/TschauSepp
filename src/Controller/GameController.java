@@ -2,25 +2,27 @@ package Controller;
 
 import View.GameView;
 import model.Game;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
 public class GameController {
 
-    private int numPlayers;
-    private int numAIPlayers;
-    private int numStartingCards;
     private Game game;
 
     public GameController(int numPlayers, int numAIPlayers, int numStartingCards) {
-        this.numPlayers = numPlayers;
-        this.numAIPlayers = numAIPlayers;
-        this.numStartingCards = numStartingCards;
+        game = new Game(numPlayers, numAIPlayers, numStartingCards);
+    }
+
+    public GameController(JSONObject jsonObject) {
+        game = new Game(jsonObject);
     }
 
     public void startGame() throws IOException {
-        game = new Game(numPlayers, numAIPlayers, numStartingCards);
-
         GameView gameView = new GameView(game);
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

@@ -1,5 +1,7 @@
 package View;
 
+import org.json.JSONPointer;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -26,7 +28,7 @@ public class StartGameView extends JDialog {
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
-
+        
         JPanel mainPanel = new JPanel();
         Border border = mainPanel.getBorder();
         Border margin = new EmptyBorder(10, 10, -10, 10);

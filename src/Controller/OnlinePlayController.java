@@ -1,8 +1,10 @@
 package Controller;
 
 import View.ConnectionSetupView;
+import View.StartGameView;
+import model.Game;
+import org.json.JSONObject;
 
-import java.awt.Graphics;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,6 +30,8 @@ public class OnlinePlayController implements Runnable {
     private boolean accepted = false;
     private boolean unableToCommunicateWithOpponent = false;
 
+    private GameController gameController;
+
     private int errors = 0;
 
     public OnlinePlayController() {
@@ -45,6 +49,7 @@ public class OnlinePlayController implements Runnable {
             thread.start();
         } catch (NullPointerException e) {
             System.out.println("No Data was provided");
+            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("Unable to connect to the address: " + ip + ":" + port);
         }
@@ -60,7 +65,7 @@ public class OnlinePlayController implements Runnable {
         }
     }
 
-    private void render(Graphics g) {
+    private void render() {
         if (unableToCommunicateWithOpponent) {
 
         }
@@ -106,6 +111,9 @@ public class OnlinePlayController implements Runnable {
             accepted = true;
             yourTurn = true;
             System.out.println("Client connected");
+            gameController.startGame();
+            JSONObject jsonObject = new JSONObject(gameController.getGame());
+            dos.writeUTF(jsonObject.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -117,12 +125,20 @@ public class OnlinePlayController implements Runnable {
         dis = new DataInputStream(socket.getInputStream());
         accepted = true;
         System.out.println("Successfully connected to the server.");
-        System.out.println("Other person is typing..");
+        JSONObject jsonObject = new JSONObject(dis.readUTF());
+        gameController = new GameController(jsonObject);
+        gameController.startGame();
     }
 
     private void initializeServer() {
-
         try {
+            StartGameView startGameWindow = new StartGameView();
+            gameController = new GameController(
+                    startGameWindow.getNumPlayersSpinner(),
+                    startGameWindow.getNumAISpinner(),
+                    startGameWindow.getNumStartingCardsSpinner()
+            );
+
             serverSocket = new ServerSocket(port, 8, InetAddress.getLocalHost());
             System.out.println("Server was created");
         } catch (Exception e) {

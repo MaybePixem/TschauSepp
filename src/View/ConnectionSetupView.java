@@ -72,6 +72,9 @@ public class ConnectionSetupView extends JDialog {
             buttonPanel.setVisible(false);
         });
 
+        portInput.setText("25565");
+        ipInput.setText("192.168.1.139");
+
         JPanel jPanel = new JPanel(new BorderLayout());
         jPanel.add(buttonPanel, BorderLayout.NORTH);
         jPanel.add(inputPanel, BorderLayout.CENTER);

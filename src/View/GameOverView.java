@@ -51,7 +51,7 @@ public class GameOverView extends JDialog {
             Player p = allPlayers.get(i);
             if (p.equals(winner))
                 continue;
-            JLabel label = new JLabel(getPlayerTypeString(p) + (i + 1) + " hat noch " + p.getdecksize() + " Karte(n)");
+            JLabel label = new JLabel(getPlayerTypeString(p) + (i + 1) + " hat noch " + p.getDecksize() + " Karte(n)");
             label.setFont(new Font("Arial", Font.PLAIN, 15));
             label.setAlignmentX(0.5f);
             otherPlayersInfoPanel.add(label);

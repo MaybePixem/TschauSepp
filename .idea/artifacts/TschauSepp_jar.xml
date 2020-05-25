@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/TschauSepp_jar</output-path>
     <root id="archive" name="TschauSepp.jar">
       <element id="module-output" name="TschauSepp" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/resources/json-20200518.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

@@ -29,7 +29,7 @@ public class Player {
      *
      * @param c Card to be added
      */
-    public void addcard(Card c) {
+    public void addCard(Card c) {
         deck.add(c);
     }
 
@@ -38,7 +38,7 @@ public class Player {
      *
      * @param c Card to be removed
      */
-    public void removecard(Card c) {
+    public void removeCard(Card c) {
         deck.remove(c);
     }
 
@@ -47,7 +47,7 @@ public class Player {
      *
      * @return calledSepp flag
      */
-    public boolean hasCalledSepp() {
+    public boolean getCalledSepp() {
         return calledSepp;
     }
 
@@ -56,7 +56,7 @@ public class Player {
      *
      * @param calledSepp flag
      */
-    public void setcalledSepp(boolean calledSepp) {
+    public void setCalledSepp(boolean calledSepp) {
         this.calledSepp = calledSepp;
     }
 
@@ -65,7 +65,7 @@ public class Player {
      *
      * @return calledTschau flag
      */
-    public boolean hasCalledTschau() {
+    public boolean getCalledTschau() {
         return calledTschau;
     }
 
@@ -74,7 +74,7 @@ public class Player {
      *
      * @param calledTschau flag
      */
-    public void setcalledTschau(boolean calledTschau) {
+    public void setCalledTschau(boolean calledTschau) {
         this.calledTschau = calledTschau;
     }
 
@@ -83,7 +83,7 @@ public class Player {
      *
      * @return deck size
      */
-    public int getdecksize() {
+    public int getDecksize() {
         return deck.size();
     }
 
@@ -92,7 +92,7 @@ public class Player {
      *
      * @return deck
      */
-    public ArrayList<Card> getdeck() {
+    public ArrayList<Card> getDeck() {
         return deck;
     }
 }
