@@ -1,16 +1,8 @@
 package Controller;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+import View.ConnectionSetupView;
+
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,13 +11,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 public class OnlinePlayController implements Runnable {
 
-    private String ip = "localhost";
+    private String ip;
     private int port = 25565;
     private Scanner scanner = new Scanner(System.in);
     private Thread thread;
@@ -36,9 +24,6 @@ public class OnlinePlayController implements Runnable {
 
     private ServerSocket serverSocket;
 
-
-    private String[] spaces = new String[9];
-
     private boolean yourTurn = false;
     private boolean accepted = false;
     private boolean unableToCommunicateWithOpponent = false;
@@ -47,32 +32,31 @@ public class OnlinePlayController implements Runnable {
 
     public OnlinePlayController() {
 
-        System.out.println("Please input the IP: ");
-        ip = scanner.nextLine();
-        System.out.println("Please input the port: ");
-        port = scanner.nextInt();
-        while (port < 1 || port > 65535) {
-            System.out.println("The port you entered was invalid, please input another port: ");
-            port = scanner.nextInt();
+        ConnectionSetupView connectionSetupView = new ConnectionSetupView();
+        try {
+            if (connectionSetupView.isHost()) {
+                initializeServer();
+            } else {
+                ip = connectionSetupView.getIpInput();
+                port = connectionSetupView.getPortInput();
+                connect();
+            }
+            thread = new Thread(this, "TschauSeppServer");
+            thread.start();
+        } catch (NullPointerException e) {
+            System.out.println("No Data was provided");
+        } catch (IOException e) {
+            System.out.println("Unable to connect to the address: " + ip + ":" + port);
         }
-
-
-        if (!connect()) {
-            initializeServer();
-        }
-
-        thread = new Thread(this, "TschauSeppServer");
-        thread.start();
     }
 
     public void run() {
         while (true) {
-            tick();
-
-            if (!accepted) {
+            if (accepted) {
+                tick();
+            } else {
                 listenForServerRequest();
             }
-
         }
     }
 
@@ -91,8 +75,21 @@ public class OnlinePlayController implements Runnable {
 
         if (!yourTurn && !unableToCommunicateWithOpponent) {
             try {
-                int space = dis.readInt();
+                String game = dis.readUTF();
+                System.out.println(game);
                 yourTurn = true;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                errors++;
+            }
+        } else {
+            try {
+                System.out.println("You can type:");
+                String bruh = scanner.nextLine();
+                dos.writeUTF(bruh);
+                yourTurn = false;
+                System.out.println("Other person is typing..");
             } catch (IOException e) {
                 e.printStackTrace();
                 errors++;
@@ -101,40 +98,36 @@ public class OnlinePlayController implements Runnable {
     }
 
     private void listenForServerRequest() {
-        Socket socket = null;
+        Socket socket;
         try {
             socket = serverSocket.accept();
             dos = new DataOutputStream(socket.getOutputStream());
             dis = new DataInputStream(socket.getInputStream());
             accepted = true;
-            System.out.println("CLIENT HAS REQUESTED TO JOIN, AND WE HAVE ACCEPTED");
+            yourTurn = true;
+            System.out.println("Client connected");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private boolean connect() {
-        try {
-            socket = new Socket(ip, port);
-            dos = new DataOutputStream(socket.getOutputStream());
-            dis = new DataInputStream(socket.getInputStream());
-            accepted = true;
-        } catch (IOException e) {
-            System.out.println("Unable to connect to the address: " + ip + ":" + port + " | Starting a server");
-            return false;
-        }
+    private void connect() throws IOException {
+        socket = new Socket(ip, port);
+        dos = new DataOutputStream(socket.getOutputStream());
+        dis = new DataInputStream(socket.getInputStream());
+        accepted = true;
         System.out.println("Successfully connected to the server.");
-        return true;
+        System.out.println("Other person is typing..");
     }
 
     private void initializeServer() {
 
         try {
             serverSocket = new ServerSocket(port, 8, InetAddress.getLocalHost());
+            System.out.println("Server was created");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        yourTurn = true;
     }
 
     public static void main(String[] args) {
