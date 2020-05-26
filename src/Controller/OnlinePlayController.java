@@ -1,6 +1,7 @@
 package Controller;
 
 import View.ConnectionSetupView;
+import View.GameOverView;
 import View.GameView;
 import View.StartOnlineGameView;
 import model.Game;
@@ -68,9 +69,15 @@ public class OnlinePlayController implements Runnable {
         try {
             System.out.println("start listening");
             game = createGameObjectFromJSONObject(new JSONObject(dis.readUTF()));
-            System.out.println("startet turn");
-            gameView.setGame(game);
-            gameView.setHideCards(false);
+            if (game.getWinningPlayer() != null) {
+                new GameOverView(gameView, game.getWinningPlayer(), game.getPlayers(), game.getFinishedPlayers());
+                gameView.dispose();
+                gameIsAlive = false;
+            } else {
+                System.out.println("startet turn");
+                gameView.setGame(game);
+                gameView.setHideCards(false);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("error");
@@ -149,7 +156,17 @@ public class OnlinePlayController implements Runnable {
 
 
     public void endGame() {
+        try {
+            yourTurn = false;
+            dos.writeUTF(new JSONObject(game).toString());
+            new GameOverView(gameView, game.getWinningPlayer(), game.getPlayers(), game.getFinishedPlayers());
+            gameView.dispose();
+            gameIsAlive = false;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public Game createGameObjectFromJSONObject(JSONObject jsonObject) {
         ArrayList<Player> players = new ArrayList<>();

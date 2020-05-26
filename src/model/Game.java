@@ -34,7 +34,6 @@ public class Game {
      * @param numberOfStartingCards Number of Cards that the Players start with
      */
     public Game(int numberOfPlayers, int numberOfAI, int numberOfStartingCards) {
-        int totalPlayers = numberOfPlayers + numberOfAI;
 
         sideDeck = createDeck();
 
@@ -76,6 +75,7 @@ public class Game {
      * @param bauerColor      bauerColor
      */
     public Game(ArrayList<Player> players, ArrayList<Player> finishedPlayers, ArrayList<Card> currentDeck, ArrayList<Card> sideDeck, int currentPlayer, CARD_COLOR bauerColor) {
+        System.out.println(currentPlayer);
         this.players = players;
         this.finishedPlayers = finishedPlayers;
         this.currentDeck = currentDeck;
@@ -214,7 +214,7 @@ public class Game {
                 if (c.getValue() == CARD_VALUE.SEVEN) {
                     nextPlayer(false, 2);
                 } else if (c.getValue() == CARD_VALUE.EIGHT) {
-                    nextPlayer(true, 0);
+                    nextPlayer(false, 0);
                 } else if (c.getValue() == CARD_VALUE.JACK) {
                     this.bauerColor = bauerColor;
                     nextPlayer(false, 0);
@@ -263,6 +263,7 @@ public class Game {
      * @return has the flag been set
      */
     public boolean callTschau() {
+        System.out.println(getCurrentPlayer().getDeck().size());
         if (getCurrentPlayer().getDeck().size() == 2) {
             players.get(currentPlayer).setCalledTschau(true);
             return true;
@@ -345,6 +346,4 @@ public class Game {
     public ArrayList<Player> getFinishedPlayers() {
         return finishedPlayers;
     }
-
-
 }

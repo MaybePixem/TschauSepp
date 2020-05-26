@@ -17,7 +17,7 @@ public class GameOverView extends JDialog {
         new GameOverView(null, game.getPlayers().get(0), game.getPlayers(), game.getFinishedPlayers());
     }
 
-    GameOverView(Frame owner, Player winner, ArrayList<Player> allPlayers, ArrayList<Player> finishedPlayers) {
+    public GameOverView(Frame owner, Player winner, ArrayList<Player> allPlayers, ArrayList<Player> finishedPlayers) {
         super(owner);
 
         int winnerIndex = allPlayers.lastIndexOf(winner);

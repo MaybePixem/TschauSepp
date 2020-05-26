@@ -50,22 +50,6 @@ public class GameView extends JFrame {
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        callTschauBtn = new JButton("Tschau");
-        callTschauBtn = new JButton("Tschau");
-        callSeppBtn = new JButton("Sepp");
-        callTschauBtn.addActionListener(actionEvent -> {
-            boolean hasFlagBeenSet = game.callTschau();
-            if (hasFlagBeenSet) {
-                callTschauBtn.setEnabled(false);
-            }
-        });
-        callSeppBtn.addActionListener(actionEvent -> {
-            boolean hasFlagBeenSet = game.callSepp();
-            if (hasFlagBeenSet) {
-                callSeppBtn.setEnabled(false);
-            }
-        });
-
         redraw();
 
         addComponentListener(new ComponentAdapter() {
@@ -107,6 +91,21 @@ public class GameView extends JFrame {
         playfieldPlanel = new JPanel();
         otherPlayersPanel = new JPanel();
 
+        callTschauBtn = new JButton("Tschau");
+        callSeppBtn = new JButton("Sepp");
+        callTschauBtn.addActionListener(actionEvent -> {
+            boolean hasFlagBeenSet = game.callTschau();
+            if (hasFlagBeenSet) {
+                callTschauBtn.setEnabled(false);
+            }
+        });
+        callSeppBtn.addActionListener(actionEvent -> {
+            boolean hasFlagBeenSet = game.callSepp();
+            if (hasFlagBeenSet) {
+                callSeppBtn.setEnabled(false);
+            }
+        });
+
         playfieldPlanel.add(new CardImage(cardImagesArr.get("blankCard"), Math.min(getWidth() / 4, MAX_CARD_SIZE), BLANK_CARD_INDEX, this));
         Card currentCardOnDeck = game.getCurrentDeck().get(game.getCurrentDeck().size() - 1);
         playfieldPlanel.add(
@@ -147,6 +146,9 @@ public class GameView extends JFrame {
         mainPanel.add(playfieldPlanel, BorderLayout.CENTER);
         if (!hideCards) {
             mainPanel.add(playerDeckPanel, BorderLayout.SOUTH);
+        } else {
+            callTschauBtn.setEnabled(false);
+            callSeppBtn.setEnabled(false);
         }
         getContentPane().removeAll();
         getContentPane().add(mainPanel);
@@ -165,12 +167,14 @@ public class GameView extends JFrame {
 
         switch (cardIndexOnPlayerDeck) {
             case BLANK_CARD_INDEX:
-                game.getCurrentPlayer().addCard(game.drawCard());
-                game.nextPlayer(false, 0);
-                if (onlinePlayController == null) {
-                    redraw();
-                } else {
-                    onlinePlayController.endTurn();
+                if (!hideCards) {
+                    game.getCurrentPlayer().addCard(game.drawCard());
+                    game.nextPlayer(false, 0);
+                    if (onlinePlayController == null) {
+                        redraw();
+                    } else {
+                        onlinePlayController.endTurn();
+                    }
                 }
                 break;
 
@@ -186,7 +190,6 @@ public class GameView extends JFrame {
                         if (Objects.isNull(winner)) {
                             redraw();
                         } else {
-                            System.out.println("bruh");
                             GameOverView gameOverView = new GameOverView(this, winner, game.getPlayers(), game.getFinishedPlayers());
                             if (gameOverView.isEndGame()) {
                                 dispose();
@@ -200,8 +203,6 @@ public class GameView extends JFrame {
                             onlinePlayController.endTurn();
                         } else {
                             onlinePlayController.endGame();
-                            GameOverView gameOverView = new GameOverView(this, winner, game.getPlayers(), game.getFinishedPlayers());
-                            dispose();
                         }
                     }
                 }
