@@ -20,14 +20,11 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class OnlinePlayController implements Runnable {
 
     private String ip;
     private int port = 25565;
-    private Thread thread;
 
     private Socket socket;
     private DataOutputStream dos;
@@ -35,8 +32,6 @@ public class OnlinePlayController implements Runnable {
 
     private ServerSocket serverSocket;
 
-    private boolean yourTurn = false;
-    private boolean accepted = false;
     private boolean startTurn = false;
     private boolean gameIsAlive = true;
 
@@ -97,8 +92,6 @@ public class OnlinePlayController implements Runnable {
             socket = serverSocket.accept();
             dos = new DataOutputStream(socket.getOutputStream());
             dis = new DataInputStream(socket.getInputStream());
-            accepted = true;
-            yourTurn = true;
             System.out.println("Client connected");
             startGame();
             JSONObject jsonObject = new JSONObject(game);
@@ -112,7 +105,6 @@ public class OnlinePlayController implements Runnable {
         socket = new Socket(ip, port);
         dos = new DataOutputStream(socket.getOutputStream());
         dis = new DataInputStream(socket.getInputStream());
-        accepted = true;
         System.out.println("Successfully connected to the server.");
         JSONObject jsonObject = new JSONObject(dis.readUTF());
         game = createGameObjectFromJSONObject(jsonObject);
@@ -149,7 +141,6 @@ public class OnlinePlayController implements Runnable {
 
     public void endTurn() {
         try {
-            yourTurn = false;
             gameView.setHideCards(true);
             dos.writeUTF(new JSONObject(game).toString());
             System.out.println("ended turn");
@@ -161,7 +152,6 @@ public class OnlinePlayController implements Runnable {
 
     public void endGame() {
         try {
-            yourTurn = false;
             dos.writeUTF(new JSONObject(game).toString());
             new GameOverView(gameView, gameController.getWinningPlayer(), game.getPlayers(), game.getFinishedPlayers());
             gameView.dispose();

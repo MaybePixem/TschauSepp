@@ -6,7 +6,6 @@ import model.card.CARD_COLOR;
 import model.card.CARD_VALUE;
 import model.card.Card;
 import model.player.Player;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Collections;
