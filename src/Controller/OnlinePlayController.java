@@ -41,6 +41,7 @@ public class OnlinePlayController implements Runnable {
     private boolean gameIsAlive = true;
 
     private Game game;
+    private GameController gameController;
     GameView gameView;
 
     public OnlinePlayController() {
@@ -69,8 +70,9 @@ public class OnlinePlayController implements Runnable {
         try {
             System.out.println("start listening");
             game = createGameObjectFromJSONObject(new JSONObject(dis.readUTF()));
-            if (game.getWinningPlayer() != null) {
-                new GameOverView(gameView, game.getWinningPlayer(), game.getPlayers(), game.getFinishedPlayers());
+            gameController.setGame(game);
+            if (gameController.getWinningPlayer() != null) {
+                new GameOverView(gameView, gameController.getWinningPlayer(), game.getPlayers(), game.getFinishedPlayers());
                 gameView.dispose();
                 gameIsAlive = false;
             } else {
@@ -86,7 +88,7 @@ public class OnlinePlayController implements Runnable {
 
 
     public void startGame() throws IOException {
-        gameView = new GameView(game, this);
+        gameView = new GameView(this, gameController);
     }
 
     private void listenForServerRequest() {
@@ -114,6 +116,7 @@ public class OnlinePlayController implements Runnable {
         System.out.println("Successfully connected to the server.");
         JSONObject jsonObject = new JSONObject(dis.readUTF());
         game = createGameObjectFromJSONObject(jsonObject);
+        gameController = new GameController(game);
         startGame();
         gameView.setHideCards(true);
     }
@@ -124,6 +127,7 @@ public class OnlinePlayController implements Runnable {
             game = new Game(
                     startGameWindow.getNumStartingCardsSpinner()
             );
+            gameController = new GameController(game);
 
             serverSocket = new ServerSocket(port, 8, InetAddress.getLocalHost());
             System.out.println("Server was created");
@@ -159,7 +163,7 @@ public class OnlinePlayController implements Runnable {
         try {
             yourTurn = false;
             dos.writeUTF(new JSONObject(game).toString());
-            new GameOverView(gameView, game.getWinningPlayer(), game.getPlayers(), game.getFinishedPlayers());
+            new GameOverView(gameView, gameController.getWinningPlayer(), game.getPlayers(), game.getFinishedPlayers());
             gameView.dispose();
             gameIsAlive = false;
         } catch (IOException e) {

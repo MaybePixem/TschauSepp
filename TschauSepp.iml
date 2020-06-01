@@ -8,14 +8,12 @@
         <option name="outFile" value="C:\Users\Tim\IdeaProjects\TschauSepp\out\artifacts\TschauSepp_jar\TschauSepp2.jar" />
         <option name="mainclass" value="Controller.OnlinePlayController" />
         <option name="conservemanifest" value="true" />
-        <option name="namingScheme" value="best" />
-        <option name="namingSafety" value="illegal" />
         <option name="jarConfig">
           <JarConfig>
             <option name="jarEntries">
               <list>
                 <option value="C:\Users\Tim\IdeaProjects\TschauSepp\out\production\TschauSepp" />
-                <option value="C:\Users\Tim\IdeaProjects\TschauSepp\src\resources\json-20200518.jar" />
+                <option value="C:\Users\Tim\IdeaProjects\TschauSepp\src\resources\json-20200518" />
               </list>
             </option>
             <option name="linkLibraries" value="/" />

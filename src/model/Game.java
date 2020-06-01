@@ -3,8 +3,6 @@ package model;
 import model.card.*;
 import model.player.AI;
 import model.player.Player;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,11 +44,11 @@ public class Game {
             players.add(ai);
         }
 
-        currentDeck.add(drawCard());
+        currentDeck.add(sideDeck.remove(0));
         while (currentDeck.get(0).getValue().isActionCard()) {
             sideDeck.add(currentDeck.get(0));
             currentDeck.remove(0);
-            currentDeck.add(drawCard());
+            currentDeck.add(sideDeck.remove(0));
         }
 
     }
@@ -122,169 +120,6 @@ public class Game {
     }
 
     /**
-     * Returns the first card from the side deck
-     *
-     * @return first card from the side deck
-     */
-    public Card drawCard() {
-        if (sideDeck.size() <= 1) {
-            Card tempCard = currentDeck.remove(currentDeck.size() - 1);
-            sideDeck.addAll(currentDeck);
-            currentDeck.clear();
-            currentDeck.add(tempCard);
-            Collections.shuffle(sideDeck);
-        }
-        return sideDeck.remove(0);
-    }
-
-    /**
-     * Sets currentPlayer to the next Player and performs action when a action card was placed.
-     *
-     * @param skip   should next player be skipped
-     * @param pickup how many cards has the next player to pickup
-     */
-    public void nextPlayer(boolean skip, int pickup) {
-        int totalPlayers = players.size();
-        if (skip) {
-            if (currentPlayer + 2 >= totalPlayers) {
-                if (currentPlayer + 1 >= totalPlayers) {
-                    currentPlayer = 1;
-                } else {
-                    currentPlayer = 0;
-                }
-            } else {
-                currentPlayer += 2;
-            }
-        } else {
-            if (currentPlayer + 1 == totalPlayers) {
-                currentPlayer = 0;
-            } else {
-                currentPlayer++;
-            }
-        }
-    }
-
-    /**
-     * Checks if someone has won the game.
-     *
-     * @return Player if someone has won and null if no one has won.
-     */
-    public Player getWinningPlayer() {
-        for (Player p :
-                players) {
-            if (p.getDeck().size() == 0)
-                return p;
-        }
-        return null;
-    }
-
-    /**
-     * Checks if card can be placed and places it when it can.
-     *
-     * @param c          The card that should be placed
-     * @param bauerColor The Color that the player has chosen if the placed card was a color-choosing-action-card
-     * @return if the card has been placed
-     */
-    public boolean playCard(Card c, CARD_COLOR bauerColor) {
-        if (checkValid(c)) {
-            if (getCurrentPlayer().getDecksize() == 2) {
-                if (!getCurrentPlayer().getCalledTschau()) {
-                    getCurrentPlayer().addCard(drawCard());
-                    getCurrentPlayer().addCard(drawCard());
-                    nextPlayer(false, 0);
-
-                    return true;
-                }
-            } else if (getCurrentPlayer().getDecksize() == 1) {
-                if (!getCurrentPlayer().getCalledSepp()) {
-                    for (int i = 0; i < 4; i++) {
-                        getCurrentPlayer().addCard(drawCard());
-                    }
-                    nextPlayer(false, 0);
-                    return true;
-                }
-            }
-
-            currentDeck.add(c);
-            players.get(currentPlayer).removeCard(c);
-
-            if (!c.getValue().isActionCard()) {
-                nextPlayer(false, 0);
-            } else {
-                if (c.getValue() == CARD_VALUE.SEVEN) {
-                    nextPlayer(false, 2);
-                } else if (c.getValue() == CARD_VALUE.EIGHT) {
-                    nextPlayer(false, 0);
-                } else if (c.getValue() == CARD_VALUE.JACK) {
-                    this.bauerColor = bauerColor;
-                    nextPlayer(false, 0);
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Moves a Player to the finishedPlayers List.
-     *
-     * @param p The Player to be moved
-     */
-    public void setPlayerToFinished(Player p) {
-        finishedPlayers.add(p);
-        players.remove(p);
-        if (currentPlayer >= players.size())
-            currentPlayer = players.size() - 1;
-    }
-
-    /**
-     * Checks if the given card can be placed on the deck.
-     *
-     * @param c The Card to be checked.
-     * @return if it is valid.
-     */
-    private boolean checkValid(Card c) {
-        if (c.getValue().isActionCard() && c.getValue() == CARD_VALUE.JACK) {
-            return true;
-        } else {
-            if (bauerColor == null) {
-                return c.getColor() == currentDeck.get(currentDeck.size() - 1).getColor()
-                        || c.getValue() == currentDeck.get(currentDeck.size() - 1).getValue();
-            } else {
-                return c.getColor() == bauerColor
-                        || c.getValue() == currentDeck.get(currentDeck.size() - 1).getValue();
-            }
-        }
-    }
-
-    /**
-     * Sets the calledTschau to true for the current player if he has 2 cards.
-     *
-     * @return has the flag been set
-     */
-    public boolean callTschau() {
-        System.out.println(getCurrentPlayer().getDeck().size());
-        if (getCurrentPlayer().getDeck().size() == 2) {
-            players.get(currentPlayer).setCalledTschau(true);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Sets the calledSepp to true for the current player if he has 1 card.
-     *
-     * @return has the flag been set
-     */
-    public boolean callSepp() {
-        if (getCurrentPlayer().getDeck().size() == 1) {
-            players.get(currentPlayer).setCalledSepp(true);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Getter for the players ArrayList
      *
      * @return players
@@ -345,5 +180,23 @@ public class Game {
      */
     public ArrayList<Player> getFinishedPlayers() {
         return finishedPlayers;
+    }
+
+    /**
+     * Setter for the currentPlayer
+     *
+     * @param currentPlayer index of the currentPlayer in the players array
+     */
+    public void setCurrentPlayerIndex(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    /**
+     * Setter für die Farbe die der Spieler gewählt hat als er die Bauer Karte gelegt hat
+     *
+     * @param bauerColor Farbe die gewählt wurde
+     */
+    public void setBauerColor(CARD_COLOR bauerColor) {
+        this.bauerColor = bauerColor;
     }
 }

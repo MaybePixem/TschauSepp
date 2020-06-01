@@ -1,5 +1,6 @@
 package View;
 
+import Controller.GameController;
 import Controller.OnlinePlayController;
 import model.*;
 import model.card.*;
@@ -21,6 +22,7 @@ public class GameView extends JFrame {
     private final int DECK_CARD_INDEX = -2;
 
     private Game game;
+    private GameController gameController;
     private HashMap<String, BufferedImage> cardImagesArr = new HashMap<>();
 
     private boolean hideCards = false;
@@ -34,13 +36,13 @@ public class GameView extends JFrame {
     private JButton callSeppBtn;
 
     public static void main(String[] args) throws IOException {
-        Game game = new Game(1, 3, 6);
-        new GameView(game);
+        GameController c = new GameController(1, 3, 6);
+        new GameView(c);
     }
 
-    public GameView(Game game) throws HeadlessException, IOException {
-        this.game = game;
-
+    public GameView(GameController gameController) throws HeadlessException, IOException {
+        this.game = gameController.getGame();
+        this.gameController = gameController;
         readImages();
 
         setTitle("Tschau Sepp");
@@ -62,13 +64,13 @@ public class GameView extends JFrame {
 
         getContentPane().add(mainPanel);
         setVisible(true);
-
     }
 
-    public GameView(Game game, OnlinePlayController onlinePlayController) throws HeadlessException, IOException {
-        this(game);
+    public GameView(OnlinePlayController onlinePlayController, GameController gameController) throws HeadlessException, IOException {
+        this(gameController);
         this.onlinePlayController = onlinePlayController;
     }
+
 
     private void readImages() throws IOException {
         for (int i = 0; i < CARD_COLOR.values().length; i++) {
@@ -94,13 +96,13 @@ public class GameView extends JFrame {
         callTschauBtn = new JButton("Tschau");
         callSeppBtn = new JButton("Sepp");
         callTschauBtn.addActionListener(actionEvent -> {
-            boolean hasFlagBeenSet = game.callTschau();
+            boolean hasFlagBeenSet = gameController.callTschau();
             if (hasFlagBeenSet) {
                 callTschauBtn.setEnabled(false);
             }
         });
         callSeppBtn.addActionListener(actionEvent -> {
-            boolean hasFlagBeenSet = game.callSepp();
+            boolean hasFlagBeenSet = gameController.callSepp();
             if (hasFlagBeenSet) {
                 callSeppBtn.setEnabled(false);
             }
@@ -168,8 +170,8 @@ public class GameView extends JFrame {
         switch (cardIndexOnPlayerDeck) {
             case BLANK_CARD_INDEX:
                 if (!hideCards) {
-                    game.getCurrentPlayer().addCard(game.drawCard());
-                    game.nextPlayer(false, 0);
+                    game.getCurrentPlayer().addCard(gameController.drawCard());
+                    gameController.nextPlayer(false, 0);
                     if (onlinePlayController == null) {
                         redraw();
                     } else {
@@ -183,9 +185,9 @@ public class GameView extends JFrame {
                 break;
 
             default:
-                boolean hasBeenPlaced = game.playCard(game.getCurrentPlayer().getDeck().get(cardIndexOnPlayerDeck), null);
+                boolean hasBeenPlaced = gameController.playCard(game.getCurrentPlayer().getDeck().get(cardIndexOnPlayerDeck), null);
                 if (hasBeenPlaced) {
-                    Player winner = game.getWinningPlayer();
+                    Player winner = gameController.getWinningPlayer();
                     if (onlinePlayController == null) {
                         if (Objects.isNull(winner)) {
                             redraw();
@@ -194,7 +196,7 @@ public class GameView extends JFrame {
                             if (gameOverView.isEndGame()) {
                                 dispose();
                             } else {
-                                game.setPlayerToFinished(winner);
+                                gameController.setPlayerToFinished(winner);
                                 redraw();
                             }
                         }
