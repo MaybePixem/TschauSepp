@@ -6,20 +6,25 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class ConnectionSetupView extends JDialog {
+public class ChoiceWindow extends JDialog{
 
-    private JTextField ipInput;
-    private JTextField portInput;
-    private JButton submitBtn;
-    private boolean isHost = false;
+    private int selectedOption;
 
-    public ConnectionSetupView() throws HeadlessException {
-        setTitle("Verbindung aufbauen");
+    public ChoiceWindow(String title, String option1, String option2) throws HeadlessException {
+        setTitle(title);
         setSize(300, 160);
         setLocationRelativeTo(null);
         setModal(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
+
+        JPanel buttonPanel = new JPanel();
+
+        JButton option1Btn = new JButton(option1);
+        JButton option2Btn = new JButton(option2);
+
+        buttonPanel.add(option1Btn);
+        buttonPanel.add(option2Btn);
 
         JPanel inputPanel = new JPanel();
         Border border = inputPanel.getBorder();
@@ -34,38 +39,26 @@ public class ConnectionSetupView extends JDialog {
                 Double.MIN_VALUE};
         inputPanel.setLayout(panelGridBagLayout);
 
-        JLabel ipLabel = new JLabel("IP Adresse:");
-        InputViewHelper.addLabelToLayout(ipLabel, 0, inputPanel);
+        inputPanel.setVisible(false);
 
-        ipInput = new JTextField();
-        InputViewHelper.addComponentToLayout(ipInput, 0, inputPanel);
-
-        JLabel numAILabel = new JLabel("Port:");
-        InputViewHelper.addLabelToLayout(numAILabel, 1, inputPanel);
-
-        portInput = new JTextField();
-        InputViewHelper.addComponentToLayout(portInput, 1, inputPanel);
-
-        submitBtn = new JButton("Verbinden");
-        InputViewHelper.addComponentToLayout(submitBtn, 2, inputPanel);
-
-        submitBtn.addActionListener(e -> dispose());
+        option1Btn.addActionListener(e -> {
+            selectedOption = 1;
+            dispose();
+        });
+        option2Btn.addActionListener(e -> {
+            selectedOption = 2;
+            dispose();
+        });
 
         JPanel jPanel = new JPanel(new BorderLayout());
+        jPanel.add(buttonPanel, BorderLayout.NORTH);
         jPanel.add(inputPanel, BorderLayout.CENTER);
-
-        portInput.setText("25565");
-        ipInput.setText("192.168.1.139");
 
         getContentPane().add(jPanel);
         setVisible(true);
     }
 
-    public String getIpInput() {
-        return ipInput.getText();
-    }
-
-    public int getPortInput() {
-        return Integer.parseInt(portInput.getText());
+    public int getSelectedOption() {
+        return selectedOption;
     }
 }

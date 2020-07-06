@@ -7,9 +7,9 @@ import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
 
-public abstract class StandardInputView extends JDialog {
+public abstract class InputViewHelper {
 
-    protected void addLabelToLayout(JLabel component, int yPos, Container containingPanel) {
+    protected static void addLabelToLayout(JLabel component, int yPos, Container containingPanel) {
 
         GridBagConstraints gridBagConstraintForLabel = new GridBagConstraints();
         gridBagConstraintForLabel.fill = GridBagConstraints.BOTH;
@@ -19,7 +19,7 @@ public abstract class StandardInputView extends JDialog {
         containingPanel.add(component, gridBagConstraintForLabel);
     }
 
-    protected void addComponentToLayout(JComponent component, int yPos, Container containingPanel) {
+    protected static void addComponentToLayout(JComponent component, int yPos, Container containingPanel) {
 
         GridBagConstraints gridBagConstraintForLabel = new GridBagConstraints();
         gridBagConstraintForLabel.fill = GridBagConstraints.BOTH;
@@ -29,7 +29,7 @@ public abstract class StandardInputView extends JDialog {
         containingPanel.add(component, gridBagConstraintForLabel);
     }
 
-    protected void makeDigitsOnlySpinnerUsingDocumentFilter(JSpinner spinner) {
+    protected static void makeDigitsOnlySpinnerUsingDocumentFilter(JSpinner spinner) {
         JSpinner.NumberEditor jsEditor = (JSpinner.NumberEditor) spinner.getEditor();
         final Document jsDoc = jsEditor.getTextField().getDocument();
         if (jsDoc instanceof PlainDocument) {

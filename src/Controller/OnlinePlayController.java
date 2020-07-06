@@ -1,6 +1,5 @@
 package Controller;
 
-import View.ConnectionSetupView;
 import View.GameOverView;
 import View.GameView;
 import View.StartOnlineGameView;
@@ -39,25 +38,30 @@ public class OnlinePlayController implements Runnable {
     private GameController gameController;
     GameView gameView;
 
-    public OnlinePlayController() {
+    public OnlinePlayController(String ip, int port) {
 
-        ConnectionSetupView connectionSetupView = new ConnectionSetupView();
         try {
-            if (connectionSetupView.isHost()) {
-                initializeServer();
-                listenForServerRequest();
-            } else {
-                ip = connectionSetupView.getIpInput();
-                port = connectionSetupView.getPortInput();
-                connect();
-            }
+            this.ip = ip;
+            this.port = port;
+            connect();
             Thread thread = new Thread(this, "bruh");
             thread.start();
+
+        } catch (IOException e) {
+            System.out.println("Unable to connect to the address: " + ip + ":" + port);
+        }
+    }
+
+    public OnlinePlayController() {
+        try {
+            initializeServer();
+            listenForServerRequest();
+            Thread thread = new Thread(this, "bruh");
+            thread.start();
+
         } catch (NullPointerException e) {
             System.out.println("No Data was provided");
             e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("Unable to connect to the address: " + ip + ":" + port);
         }
     }
 
@@ -133,10 +137,6 @@ public class OnlinePlayController implements Runnable {
         while (gameIsAlive) {
             tick();
         }
-    }
-
-    public static void main(String[] args) {
-        OnlinePlayController o = new OnlinePlayController();
     }
 
     public void endTurn() {

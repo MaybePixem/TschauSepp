@@ -6,7 +6,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class StartNormalGameView extends StandardInputView {
+public class StartNormalGameView extends JDialog {
     private JSpinner numPlayersSpinner;
     private JSpinner numAISpinner;
     private JSpinner numStartingCardsSpinner;
@@ -38,27 +38,26 @@ public class StartNormalGameView extends StandardInputView {
         SpinnerModel model2 = new SpinnerNumberModel(0, 0, 4, 1);
         SpinnerModel model3 = new SpinnerNumberModel(0, 0, 12, 1);
 
-
         JLabel numPlayersLabel = new JLabel("Anzahl Spieler:");
-        addLabelToLayout(numPlayersLabel, 0, mainPanel);
+        InputViewHelper.addLabelToLayout(numPlayersLabel, 0, mainPanel);
 
         numPlayersSpinner = new JSpinner(model1);
-        makeDigitsOnlySpinnerUsingDocumentFilter(numPlayersSpinner);
-        addComponentToLayout(numPlayersSpinner, 0, mainPanel);
+        InputViewHelper.makeDigitsOnlySpinnerUsingDocumentFilter(numPlayersSpinner);
+        InputViewHelper.addComponentToLayout(numPlayersSpinner, 0, mainPanel);
 
         JLabel numAILabel = new JLabel("Anzahl Roboter:");
-        addLabelToLayout(numAILabel, 1, mainPanel);
+        InputViewHelper.addLabelToLayout(numAILabel, 1, mainPanel);
 
         numAISpinner = new JSpinner(model2);
-        makeDigitsOnlySpinnerUsingDocumentFilter(numAISpinner);
-        addComponentToLayout(numAISpinner, 1, mainPanel);
+        InputViewHelper.makeDigitsOnlySpinnerUsingDocumentFilter(numAISpinner);
+        InputViewHelper.addComponentToLayout(numAISpinner, 1, mainPanel);
 
         JLabel numStartingCardsLabel = new JLabel("Anzahl Startkarten:");
-        addLabelToLayout(numStartingCardsLabel, 2, mainPanel);
+        InputViewHelper.addLabelToLayout(numStartingCardsLabel, 2, mainPanel);
 
         numStartingCardsSpinner = new JSpinner(model3);
-        makeDigitsOnlySpinnerUsingDocumentFilter(numStartingCardsSpinner);
-        addComponentToLayout(numStartingCardsSpinner, 2, mainPanel);
+        InputViewHelper.makeDigitsOnlySpinnerUsingDocumentFilter(numStartingCardsSpinner);
+        InputViewHelper.addComponentToLayout(numStartingCardsSpinner, 2, mainPanel);
 
         submitBtn = new JButton("Starten");
         GridBagConstraints gridBagConstraintForLabel = new GridBagConstraints();

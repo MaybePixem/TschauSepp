@@ -6,7 +6,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class StartOnlineGameView extends StandardInputView {
+public class StartOnlineGameView extends JDialog {
 
     private JSpinner numStartingCardsSpinner;
     private JButton submitBtn;
@@ -37,11 +37,11 @@ public class StartOnlineGameView extends StandardInputView {
 
 
         JLabel numStartingCardsLabel = new JLabel("Anzahl Startkarten:");
-        addLabelToLayout(numStartingCardsLabel, 0, mainPanel);
+        InputViewHelper.addLabelToLayout(numStartingCardsLabel, 0, mainPanel);
 
         numStartingCardsSpinner = new JSpinner(model1);
-        makeDigitsOnlySpinnerUsingDocumentFilter(numStartingCardsSpinner);
-        addComponentToLayout(numStartingCardsSpinner, 0, mainPanel);
+        InputViewHelper.makeDigitsOnlySpinnerUsingDocumentFilter(numStartingCardsSpinner);
+        InputViewHelper.addComponentToLayout(numStartingCardsSpinner, 0, mainPanel);
 
         submitBtn = new JButton("Starten");
         GridBagConstraints gridBagConstraintForLabel = new GridBagConstraints();
