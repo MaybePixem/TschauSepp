@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        ChoiceWindow selectGameTypeView = new ChoiceWindow("Spielart wählen", "Online", "Local");
+        ChoiceWindow selectGameTypeView = new ChoiceWindow("Spielart wählen", "Online", "Offline");
         if (selectGameTypeView.getSelectedOption() == 1) {
             ChoiceWindow selectClientTypeView = new ChoiceWindow("Spiel starten", "Host", "Client");
             if (selectClientTypeView.getSelectedOption() == 2) {

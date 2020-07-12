@@ -10,6 +10,11 @@ import model.player.Player;
 import java.io.IOException;
 import java.util.Collections;
 
+/**
+ * Controls  the Game. Contains all the Game Logic.
+ *
+ * @author Tim Bucher
+ */
 public class GameController {
 
     private Game game;

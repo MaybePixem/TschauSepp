@@ -20,6 +20,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * Contains all the logic needed for Online Play. Uses the GameController class to control the game.
+ *
+ * @author Tim Bucher
+ */
 public class OnlinePlayController implements Runnable {
 
     private String ip;

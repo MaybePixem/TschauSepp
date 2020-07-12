@@ -93,6 +93,9 @@ public class GameView extends JFrame {
         playfieldPlanel = new JPanel();
         otherPlayersPanel = new JPanel();
 
+        otherPlayersPanel.setLayout(new BoxLayout(otherPlayersPanel, BoxLayout.PAGE_AXIS));
+        otherPlayersPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
+
         callTschauBtn = new JButton("Tschau");
         callSeppBtn = new JButton("Sepp");
         callTschauBtn.addActionListener(actionEvent -> {
@@ -141,11 +144,21 @@ public class GameView extends JFrame {
 
         for (Player p :
                 game.getPlayers()) {
-            otherPlayersPanel.add(new JLabel(Integer.toString(p.getDecksize())));
+            String text =
+                    "Spieler " +
+                            (game.getPlayers().indexOf(p) + 1) +
+                            " hat " +
+                            p.getDecksize() +
+                            (p.getDecksize() == 1 ? " Karte" : " Karten");
+
+            JLabel jLabel = new JLabel(text);
+            
+            otherPlayersPanel.add(jLabel);
         }
 
-        mainPanel.add(otherPlayersPanel, BorderLayout.NORTH);
+        mainPanel.add(otherPlayersPanel, BorderLayout.WEST);
         mainPanel.add(playfieldPlanel, BorderLayout.CENTER);
+
         if (!hideCards) {
             mainPanel.add(playerDeckPanel, BorderLayout.SOUTH);
         } else {

@@ -1,5 +1,6 @@
 package model.player;
 
+import Controller.GameController;
 import model.card.Card;
 
 import java.util.ArrayList;
@@ -18,5 +19,13 @@ public class AI extends Player {
      */
     public AI(ArrayList<Card> deck) {
         super(deck);
+    }
+
+    /**
+     * Hardcoded "Brain" of the AI. Decides what the AI does.
+     * @param gameController GameController
+     */
+    public void makeTurn(GameController gameController){
+
     }
 }
