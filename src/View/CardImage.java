@@ -6,6 +6,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+/**
+ * Displays an image for a card.
+ *
+ * @author Tim Bucher
+ */
 public class CardImage extends JPanel {
 
     private BufferedImage img;

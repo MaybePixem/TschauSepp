@@ -5,6 +5,7 @@ import model.Game;
 import model.card.CARD_COLOR;
 import model.card.CARD_VALUE;
 import model.card.Card;
+import model.player.AI;
 import model.player.Player;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.util.Collections;
 public class GameController {
 
     private Game game;
+    private GameView gameView;
 
     public GameController(int numPlayers, int numAIPlayers, int numStartingCards) {
         game = new Game(numPlayers, numAIPlayers, numStartingCards);
@@ -28,7 +30,7 @@ public class GameController {
     }
 
     public void startGame() throws IOException {
-        GameView gameView = new GameView(this);
+        gameView = new GameView(this);
     }
 
     public Game getGame() {
@@ -80,6 +82,9 @@ public class GameController {
                 game.setCurrentPlayerIndex(game.getCurrentPlayerIndex() + 1);
             }
         }
+        if (game.getCurrentPlayer() instanceof AI) {
+            ((AI) game.getCurrentPlayer()).makeTurn(this);
+        }
     }
 
     /**
@@ -110,7 +115,6 @@ public class GameController {
                     game.getCurrentPlayer().addCard(drawCard());
                     game.getCurrentPlayer().addCard(drawCard());
                     nextPlayer(false, 0);
-
                     return true;
                 }
             } else if (game.getCurrentPlayer().getDecksize() == 1) {
@@ -161,7 +165,7 @@ public class GameController {
      * @param c The Card to be checked.
      * @return if it is valid.
      */
-    private boolean checkValid(Card c) {
+    public boolean checkValid(Card c) {
         if (c.getValue().isActionCard() && c.getValue() == CARD_VALUE.JACK) {
             return true;
         } else {
@@ -200,5 +204,14 @@ public class GameController {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Getter for the Game View
+     *
+     * @return Game View
+     */
+    public GameView getGameView() {
+        return gameView;
     }
 }

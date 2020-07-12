@@ -6,6 +6,11 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * Basic 2-way choice window.
+ *
+ * @author Tim Bucher
+ */
 public class ChoiceWindow extends JDialog{
 
     private int selectedOption;

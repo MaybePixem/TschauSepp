@@ -8,6 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * View when a player has won.
+ *
+ * @author Tim Bucher
+ */
 public class GameOverView extends JDialog {
 
     private boolean endGame;

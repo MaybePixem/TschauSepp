@@ -15,6 +15,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * View for the game.
+ *
+ * @author Tim Bucher
+ */
 public class GameView extends JFrame {
 
     private final int MAX_CARD_SIZE = 150;
@@ -152,7 +157,7 @@ public class GameView extends JFrame {
                             (p.getDecksize() == 1 ? " Karte" : " Karten");
 
             JLabel jLabel = new JLabel(text);
-            
+
             otherPlayersPanel.add(jLabel);
         }
 
@@ -205,13 +210,7 @@ public class GameView extends JFrame {
                         if (Objects.isNull(winner)) {
                             redraw();
                         } else {
-                            GameOverView gameOverView = new GameOverView(this, winner, game.getPlayers(), game.getFinishedPlayers());
-                            if (gameOverView.isEndGame()) {
-                                dispose();
-                            } else {
-                                gameController.setPlayerToFinished(winner);
-                                redraw();
-                            }
+                            setGameOver(winner);
                         }
                     } else {
                         if (Objects.isNull(winner)) {
@@ -227,5 +226,15 @@ public class GameView extends JFrame {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public void setGameOver(Player winner) {
+        GameOverView gameOverView = new GameOverView(this, winner, game.getPlayers(), game.getFinishedPlayers());
+        if (gameOverView.isEndGame()) {
+            dispose();
+        } else {
+            gameController.setPlayerToFinished(winner);
+            redraw();
+        }
     }
 }

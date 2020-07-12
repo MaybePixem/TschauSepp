@@ -6,6 +6,11 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * View to start a online game.
+ *
+ * @author Tim Bucher
+ */
 public class StartOnlineGameView extends JDialog {
 
     private JSpinner numStartingCardsSpinner;

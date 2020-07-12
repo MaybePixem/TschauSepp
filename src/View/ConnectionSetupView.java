@@ -6,6 +6,11 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * View to setup a connection.
+ *
+ * @author Tim Bucher
+ */
 public class ConnectionSetupView extends JDialog {
 
     private JTextField ipInput;

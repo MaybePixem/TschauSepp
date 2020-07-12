@@ -6,6 +6,11 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * View to start a offline game.
+ *
+ * @author Tim Bucher
+ */
 public class StartNormalGameView extends JDialog {
     private JSpinner numPlayersSpinner;
     private JSpinner numAISpinner;

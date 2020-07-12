@@ -4,6 +4,11 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
+/**
+ * Controls  the Game. Contains all the Game Logic.
+ *
+ * @author Tim Bucher
+ */
  class SpinnerNumberFilter extends DocumentFilter {
 
     @Override
